@@ -11,17 +11,17 @@
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
-Name:		XFree86-driver-nvidia
+Name:		X11-driver-nvidia
 Version:	%{_nv_ver}.%{_nv_rel}
-%define	_rel	3
+%define	_rel	4
 Release:	%{_rel}
 License:	nVidia Binary
 Vendor:		nVidia Corp.
 Group:		X11/XFree86
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}.run
 # Source0-md5:	2ceffa20391d5471b8a483101563eccb
-Patch0:		%{name}-cleanups.patch
-Patch1:		%{name}-api_call.patch
+Patch0:		%{name}-gcc34.patch
+Patch1:		%{name}-api_calls.patch
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
@@ -29,15 +29,18 @@ BuildRequires:	grep
 BuildRequires:	%{kgcc_package}
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRequires:	textutils
-Requires:	XFree86-Xserver
-Requires:	XFree86-libs >= 4.0.1
-Requires:	XFree86-modules >= 4.0.1
-Requires:	XFree86-nvidia-kernel
+Requires:	X11-driver-nvidia(kernel)
+Requires:	X11-Xserver
+Requires:	X11-libs >= 4.0.1
+Requires:	X11-modules >= 4.0.1
 %{?with_tls:Requires:	glibc(tls)}
+Provides:	X11-OpenGL-core
+Provides:	XFree86-driver-nvidia
 Provides:	XFree86-OpenGL-core
 Obsoletes:	Mesa
 Obsoletes:	XFree86-OpenGL-core
 Obsoletes:	XFree86-OpenGL-libGL
+Obsoletes:	XFree86-driver-nvidia
 Obsoletes:	XFree86-nvidia
 Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
 ExclusiveArch:	%{ix86}
@@ -70,9 +73,10 @@ pakietów XFree86 - NIE s± obs³ugiwane przez ten pakiet.
 Summary:	OpenGL for X11R6 development (only gl?.h)
 Summary(pl):	Pliki nag³ówkowe OpenGL dla systemu X11R6 (tylko gl?.h)
 Group:		X11/Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Provides:	OpenGL-devel-base
 Obsoletes:	OpenGL-devel-base
+Obsoletes:	XFree86-driver-nvidia-devel
 Conflicts:	XFree86-OpenGL-devel < 4.3.99.902-0.3
 
 %description devel
@@ -86,7 +90,7 @@ sterowników nvidii.
 Summary:	Tools for advanced control of nVidia graphic cards
 Summary(pl):	Narzêdzia do zarz±dzania kartami graficznymi nVidia
 Group:		Application/System
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description progs
 Tools for advanced control of nVidia graphic cards.
@@ -105,7 +109,7 @@ PreReq:		modutils >= 2.3.18-2
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
 %{?with_dist_kernel:%requires_releq_kernel_up}
-Provides:	XFree86-nvidia-kernel
+Provides:	X11-driver-nvidia(kernel)
 Obsoletes:	XFree86-nvidia-kernel
 
 %description -n kernel-video-nvidia
@@ -128,7 +132,7 @@ PreReq:		modutils >= 2.3.18-2
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
 %{?with_dist_kernel:%requires_releq_kernel_smp}
-Provides:	XFree86-nvidia-kernel
+Provides:	X11-driver-nvidia(kernel)
 Obsoletes:	XFree86-nvidia-kernel
 
 %description -n kernel-smp-video-nvidia
