@@ -8,12 +8,13 @@
 %define		_nv_ver		1.0
 %define		_nv_rel		5336
 %define		_nv_pkg		pkg0
+%define		_min_x11	6.7.0
+%define		_rel		4
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
 Name:		X11-driver-nvidia
 Version:	%{_nv_ver}.%{_nv_rel}
-%define	_rel	4
 Release:	%{_rel}
 License:	nVidia Binary
 Vendor:		nVidia Corp.
@@ -31,8 +32,8 @@ BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRequires:	textutils
 Requires:	X11-driver-nvidia(kernel)
 Requires:	X11-Xserver
-Requires:	X11-libs >= 4.0.1
-Requires:	X11-modules >= 4.0.1
+Requires:	X11-libs >= %{_min_x11}
+Requires:	X11-modules >= %{_min_x11}
 %{?with_tls:Requires:	glibc(tls)}
 Provides:	X11-OpenGL-core
 Provides:	XFree86-driver-nvidia
