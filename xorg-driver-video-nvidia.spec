@@ -328,5 +328,5 @@ EOF
 %{_libdir}/libXvMCNVIDIA.a
 
 %files progs
-%defattr(755,root,root,755)
-%{_bindir}/nvidia-settings
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/nvidia-settings
