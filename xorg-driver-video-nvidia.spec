@@ -21,8 +21,10 @@ Vendor:		nVidia Corp.
 Group:		X11/XFree86
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
 # Source0-md5:	51e83be46f83c52102ccb8995b54f4e2
+# Source0-size:	8167999
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
 # Source1-md5:	6c7b0c8b3ce5c34186e0c80042e6d046
+# Source1-size:	7333486
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
 URL:		http://www.nvidia.com/object/linux.html
