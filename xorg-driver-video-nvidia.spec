@@ -19,6 +19,7 @@ Release:	%{_rel}
 License:	nVidia Binary
 Vendor:		nVidia Corp.
 Group:		X11/XFree86
+# why not pkg0!?
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
 # Source0-md5:	51e83be46f83c52102ccb8995b54f4e2
 # Source0-size:	8167999
@@ -179,6 +180,7 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 
 %build
+%if %{with kernel}
 cd usr/src/nv/
 ln -sf Makefile.kbuild Makefile
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
@@ -201,6 +203,7 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 		%{?with_verbose:V=1}
 	mv nvidia.ko nvidia-$cfg.ko
 done
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -222,7 +225,7 @@ install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 %endif
 
 install usr/X11R6/lib/modules/drivers/nvidia_drv.o $RPM_BUILD_ROOT%{_libdir}/modules/drivers
-install usr/X11R6/lib/libXvMCNVIDIA.* $RPM_BUILD_ROOT%{_libdir}
+install usr/X11R6/lib/libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}
 install usr/include/GL/*.h	$RPM_BUILD_ROOT/usr/include/GL
 #install usr/bin/nvidia-settings $RPM_BUILD_ROOT%{_bindir}
 
