@@ -236,7 +236,7 @@ install nvidia-smp.ko \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	
+%post
 /sbin/ldconfig
 cat << EOF
 
@@ -244,9 +244,8 @@ cat << EOF
  *                                                     *
  *  NOTE:                                              *
  *  You must install:                                  *
- *  kernel-video-nvidia-%{version}-%{release}                       *
- *  for this driver to work correctly                  *
- *                                                     *
+ *  kernel(24)(-smp)-video-nvidia-%{version}             *
+ *  for this driver to work                            *
  *******************************************************
 
 EOF
