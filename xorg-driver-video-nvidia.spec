@@ -6,9 +6,9 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		6629
+%define		_nv_rel		7167
 %define		_min_x11	6.7.0
-%define		_rel		4
+%define		_rel		1
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -20,21 +20,15 @@ Vendor:		nVidia Corp.
 Group:		X11/XFree86
 # why not pkg0!?
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	f7737c1e95371f37a4fd30da2f11e72c
+# Source0-md5:	d88d606873be255e8c4926961a1f09bf
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	652e69f549c81a7a3f2806daa74b9c36
+# Source1-md5:	a0433d841c41862af266300b589c12a7
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
 Patch2:		%{name}-conftest.patch
 # http://www.minion.de/files/1.0-6629/
-Patch3:		NVIDIA_kernel-1.0-6629-1155389.diff
-Patch4:		NVIDIA_kernel-1.0-6629-1161283.diff
-Patch5:		NVIDIA_kernel-1.0-6629-1165235.diff
-Patch6:		NVIDIA_kernel-1.0-6629-1171869.diff
-Patch7:		NVIDIA_kernel-1.0-6629-1175225.diff
-Patch8:		NVIDIA_kernel-1.0-6629-1182399.diff
-Patch9:		NVIDIA_kernel-1.0-6629-1189413.diff
-Patch10:	NVIDIA_kernel-1.0-6629-1201042.diff
+Patch3:		NVIDIA_kernel-1.0-7167-1233959.diff
+Patch4:		NVIDIA_kernel-1.0-7167-1237815.diff
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
@@ -180,12 +174,6 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %patch2 -p1
 %patch3 -p0
 %patch4 -p0
-%patch5 -p0
-%patch6 -p0
-%patch7 -p0
-%patch8 -p0
-%patch9 -p0
-%patch10 -p0
 sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 
 %build
