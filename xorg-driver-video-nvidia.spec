@@ -318,7 +318,7 @@ EOF
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
 /usr/include/GL/*.h
 # -static
-%{_libdir}/libXvMCNVIDIA.a
+#%{_libdir}/libXvMCNVIDIA.a
 
 %files progs
 %defattr(755,root,root,755)
