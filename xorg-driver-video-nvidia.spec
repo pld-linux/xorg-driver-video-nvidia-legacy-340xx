@@ -51,7 +51,7 @@ Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_noautoreqdep	libGL.so.%{_nv_ver}.%{_nv_rel} libGLcore.so.%{_nv_ver}.%{_nv_rel}
+%define		_noautoreqdep	libGL.so.1 libGLcore.so.1
 %define		_prefix		/usr/X11R6
 
 %description
