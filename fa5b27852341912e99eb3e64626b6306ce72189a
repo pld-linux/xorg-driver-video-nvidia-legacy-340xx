@@ -1,0 +1,4 @@
+- 4349
+- XFree driver and kernel module now in one package
+- moved libGL.so to /usr/lib
+- you want kernel module, you do it
