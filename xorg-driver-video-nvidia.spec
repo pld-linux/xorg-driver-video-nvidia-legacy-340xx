@@ -5,6 +5,11 @@
 %bcond_without	kernel		# without kernel packages
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	tls		# install libraries with tls support
+%bcond_with	nptl		# implies TLS support
+#
+%if %{with nptl}
+%define		with_tls	1
+%endif
 #
 %define		_nv_ver		1.0
 %define		_nv_rel		6629
@@ -22,10 +27,8 @@ Group:		X11/XFree86
 # why not pkg0!?
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
 # Source0-md5:	f7737c1e95371f37a4fd30da2f11e72c
-# Source0-size:	8167999
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
 # Source1-md5:	652e69f549c81a7a3f2806daa74b9c36
-# Source1-size:	7333486
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
 Patch2:		%{name}-conftest.patch
