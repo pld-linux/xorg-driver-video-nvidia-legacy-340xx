@@ -4,17 +4,11 @@
 %bcond_without	smp		# without smp packages
 %bcond_without	kernel		# without kernel packages
 %bcond_with	verbose		# verbose build (V=1)
-%bcond_with	tls		# install libraries with tls support
-%bcond_with	nptl		# implies TLS support
-#
-%if %{with nptl}
-%define		with_tls	1
-%endif
 #
 %define		_nv_ver		1.0
 %define		_nv_rel		6629
 %define		_min_x11	6.7.0
-%define		_rel		2
+%define		_rel		3
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -46,7 +40,6 @@ BuildRequires:	textutils
 Requires:	X11-Xserver
 Requires:	X11-libs >= %{_min_x11}
 Requires:	X11-modules >= %{_min_x11}
-%{?with_tls:Requires:	glibc(tls)}
 Provides:	X11-OpenGL-core
 Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
@@ -215,12 +208,13 @@ done
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/modules/{drivers,extensions} \
-	$RPM_BUILD_ROOT{/usr/include/GL,/usr/%{_lib},%{_bindir}}
+	$RPM_BUILD_ROOT{/usr/include/GL,/usr/%{_lib}/tls,%{_bindir}}
 
 ln -sf $RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_prefix}/../lib
 
 install usr/bin/nvidia-settings $RPM_BUILD_ROOT%{_bindir}
-install usr/lib%{?with_tls:/tls}/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT%{_libdir}
+install usr/lib/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT/usr/%{_lib}
+install usr/lib/tls/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT/usr/%{_lib}/tls
 install usr/lib/libGL{,core}.so.%{version} $RPM_BUILD_ROOT%{_libdir}
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/modules/extensions
@@ -245,6 +239,7 @@ ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
 ln -sf %{_libdir}/libGL.so.1 $RPM_BUILD_ROOT/usr/%{_lib}/libGL.so.1
 ln -sf %{_libdir}/libGL.so $RPM_BUILD_ROOT/usr/%{_lib}/libGL.so
 
+%if %{with kernel}
 cd usr/src/nv/
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 install nvidia-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
@@ -252,6 +247,7 @@ install nvidia-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
 %if %{with smp} && %{with dist_kernel}
 install nvidia-smp.ko \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/nvidia.ko
+%endif
 %endif
 
 %clean
@@ -295,7 +291,8 @@ EOF
 %attr(755,root,root) %{_libdir}/libGL.so
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
-%attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*.*
+%attr(755,root,root) /usr/%{_lib}/libnvidia-tls.so.*.*.*
+%attr(755,root,root) /usr/%{_lib}/tls/libnvidia-tls.so.*.*.*
 %ifarch amd64
 # support for running 32-bit OpenGL applications on 64-bit AMD64 Linux installations
 #dir %{_libdir32}
