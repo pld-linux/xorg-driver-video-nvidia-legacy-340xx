@@ -9,7 +9,7 @@
 %define		_nv_ver		1.0
 %define		_nv_rel		6629
 %define		_min_x11	6.7.0
-%define		_rel		0.1
+%define		_rel		0.2
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -28,6 +28,7 @@ Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/N
 # Source1-size:	7333486
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
+Patch2:		%{name}-conftest.patch
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
@@ -171,6 +172,7 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %endif
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 
 %build
@@ -190,13 +192,13 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	%{__make} -C %{_kernelsrcdir} clean \
 		RCS_FIND_IGNORE="-name '*.ko' -o -name nv-kernel.o -o" \
 		SYSSRC=%{_kernelsrcdir} \
-		SYSOUT=`pwd` \
+		SYSOUT=$PWD \
 		M=$PWD O=$PWD \
 		%{?with_verbose:V=1}
 	%{__make} -C %{_kernelsrcdir} modules \
 		CC="%{__cc}" CPP="%{__cpp}" \
 		SYSSRC=%{_kernelsrcdir} \
-		SYSOUT=`pwd` \
+		SYSOUT=$PWD \
 		M=$PWD O=$PWD \
 		%{?with_verbose:V=1}
 	mv nvidia.ko nvidia-$cfg.ko
