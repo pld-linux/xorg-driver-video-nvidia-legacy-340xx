@@ -54,7 +54,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_noautoreqdep	libGL.so.1 libGLcore.so.1
 %define		_prefix		/usr/X11R6
-%define		_libdir32	%{_prefix}/lib32
+%ifarch amd64
+%define		_libdir32	%{_prefix}/lib
+%endif
 
 %description
 This driver set adds improved 2D functionality to the XFree86 4.0 X
