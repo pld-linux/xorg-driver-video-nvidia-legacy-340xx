@@ -36,9 +36,13 @@ Requires:	X11-libs >= %{_min_x11}
 Requires:	X11-modules >= %{_min_x11}
 %{?with_tls:Requires:	glibc(tls)}
 Provides:	X11-OpenGL-core
-Provides:	XFree86-driver-nvidia
+Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
+Provides:	XFree86-OpenGL-libGL
+Provides:	XFree86-driver-nvidia
 Obsoletes:	Mesa
+Obsoletes:	X11-OpenGL-core
+Obsoletes:	X11-OpenGL-libGL
 Obsoletes:	XFree86-OpenGL-core
 Obsoletes:	XFree86-OpenGL-libGL
 Obsoletes:	XFree86-driver-nvidia
