@@ -8,7 +8,7 @@
 %define		_nv_ver		1.0
 %define		_nv_rel		6106
 %define		_min_x11	6.7.0
-%define		_rel		1
+%define		_rel		2
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -31,7 +31,6 @@ BuildRequires:	%{kgcc_package}
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRequires:	sed >= 4.0
 BuildRequires:	textutils
-Requires:	X11-driver-nvidia(kernel)
 Requires:	X11-Xserver
 Requires:	X11-libs >= %{_min_x11}
 Requires:	X11-modules >= %{_min_x11}
@@ -237,6 +236,24 @@ rm -rf $RPM_BUILD_ROOT
 
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
+
+cat << EOF
+
+ *******************************************************
+ *                                                     *
+ *  NOTE:                                              *
+ *  You must install:                                  *
+ *  kernel-video-nvidia-%{version}-%{release}                       *
+ *  for this driver to work correctly                  *
+ *                                                     *
+ *******************************************************
+
+EOF
+
+%postun 	-p /sbin/ldconfig
+
+%post 	st 	-p /sbin/ldconfig
+%postun	st 	-p /sbin/ldconfig
 
 %post	-n kernel-video-nvidia
 %depmod %{_kernel_ver}
