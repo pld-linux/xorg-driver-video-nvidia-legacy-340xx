@@ -29,7 +29,6 @@ URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
-%{?with_dist_kernel:BuildRequires:	kernel-source >= 2.6.7}
 BuildRequires:	%{kgcc_package}
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRequires:	sed >= 4.0
