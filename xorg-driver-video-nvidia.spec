@@ -7,7 +7,6 @@
 #
 %define		_nv_ver		1.0
 %define		_nv_rel		6106
-%define		_nv_pkg		pkg1
 %define		_min_x11	6.7.0
 %define		_rel		1
 #
@@ -19,16 +18,18 @@ Release:	%{_rel}
 License:	nVidia Binary
 Vendor:		nVidia Corp.
 Group:		X11/XFree86
-Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}.run
+Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
 # Source0-md5:	5432f919f0211ce36b854d87108d7db0
+Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
+# Source1-md5:	024f21a3fa134bee8339adac64bdc77a
 Patch0:		%{name}-gcc34.patch
-Patch1:		%{name}-Makefile.patch
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
 BuildRequires:	%{kgcc_package}
 BuildRequires:	rpmbuild(macros) >= 1.153
+BuildRequires:	sed >= 4.0
 BuildRequires:	textutils
 Requires:	X11-driver-nvidia(kernel)
 Requires:	X11-Xserver
@@ -48,11 +49,12 @@ Obsoletes:	XFree86-OpenGL-libGL
 Obsoletes:	XFree86-driver-nvidia
 Obsoletes:	XFree86-nvidia
 Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
-ExclusiveArch:	%{ix86}
+ExclusiveArch:	%{ix86} amd64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_noautoreqdep	libGL.so.1 libGLcore.so.1
 %define		_prefix		/usr/X11R6
+%define		_libdir32	%{_prefix}/lib32
 
 %description
 This driver set adds improved 2D functionality to the XFree86 4.0 X
@@ -152,11 +154,16 @@ przez sterownik nVidii dla XFree86 4.
 
 %prep
 cd %{_builddir}
-rm -rf NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}
+rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
+%ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}
+%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1
+%else
+/bin/sh %{SOURCE1} --extract-only
+%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2
+%endif
 %patch0 -p1
-%patch1 -p1
+sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 
 %build
 cd usr/src/nv/
@@ -194,6 +201,12 @@ install usr/lib%{?with_tls:/tls}/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT%{_l
 install usr/lib/libGL{,core}.so.%{version} $RPM_BUILD_ROOT%{_libdir}
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/modules/extensions
+%ifarch amd64
+# support for running 32-bit OpenGL applications on 64-bit AMD64 Linux installations
+#install -d $RPM_BUILD_ROOT%{_libdir32}
+#install usr/lib32%{?with_tls:/tls}/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT%{_libdir32}
+#install usr/lib32/libGL{,core}.so.%{version} $RPM_BUILD_ROOT%{_libdir32}
+%endif
 
 install usr/X11R6/lib/modules/drivers/nvidia_drv.o $RPM_BUILD_ROOT%{_libdir}/modules/drivers
 install usr/X11R6/lib/libXvMCNVIDIA.* $RPM_BUILD_ROOT%{_libdir}
@@ -245,6 +258,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*.*
+%ifarch amd64
+# support for running 32-bit OpenGL applications on 64-bit AMD64 Linux installations
+#dir %{_libdir32}
+#attr(755,root,root) %{_libdir32}/libGL.so.*.*
+#attr(755,root,root) %{_libdir32}/libGLcore.so.*.*
+#attr(755,root,root) %{_libdir32}/libXvMCNVIDIA.so.*.*
+#attr(755,root,root) %{_libdir32}/libnvidia-tls.so.*.*.*
+%endif
 %attr(755,root,root) /usr/%{_lib}/libGL.so.1
 %attr(755,root,root) /usr/%{_lib}/libGL.so
 %attr(755,root,root) %{_libdir}/modules/extensions/libglx.so*
