@@ -41,7 +41,6 @@ Provides:	X11-OpenGL-core
 Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
 Provides:	XFree86-OpenGL-libGL
-Provides:	X11-driver-nvidia
 Obsoletes:	Mesa
 Obsoletes:	X11-OpenGL-core
 Obsoletes:	X11-OpenGL-libGL
@@ -100,6 +99,7 @@ sterowników nvidii.
 Summary:	Tools for advanced control of nVidia graphic cards
 Summary(pl):	Narzêdzia do zarz±dzania kartami graficznymi nVidia
 Group:		Application/System
+Obsoletes:	XFree86-driver-nvidia-progs
 Requires:	%{name} = %{version}-%{release}
 
 %description progs
