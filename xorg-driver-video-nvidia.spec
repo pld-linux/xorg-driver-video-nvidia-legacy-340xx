@@ -189,10 +189,14 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	touch include/config/MARKER
 	%{__make} -C %{_kernelsrcdir} clean \
 		RCS_FIND_IGNORE="-name '*.ko' -o -name nv-kernel.o -o" \
+		SYSSRC=%{_kernelsrcdir} \
+		SYSOUT=`pwd` \
 		M=$PWD O=$PWD \
 		%{?with_verbose:V=1}
 	%{__make} -C %{_kernelsrcdir} modules \
 		CC="%{__cc}" CPP="%{__cpp}" \
+		SYSSRC=%{_kernelsrcdir} \
+		SYSOUT=`pwd` \
 		M=$PWD O=$PWD \
 		%{?with_verbose:V=1}
 	mv nvidia.ko nvidia-$cfg.ko
@@ -220,6 +224,7 @@ install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 
 install usr/X11R6/lib/modules/drivers/nvidia_drv.o $RPM_BUILD_ROOT%{_libdir}/modules/drivers
 install usr/X11R6/lib/libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}
+install usr/X11R6/lib/libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
 install usr/include/GL/*.h	$RPM_BUILD_ROOT/usr/include/GL
 #install usr/bin/nvidia-settings $RPM_BUILD_ROOT%{_bindir}
 
@@ -276,7 +281,7 @@ EOF
 %defattr(644,root,root,755)
 %doc LICENSE
 %doc usr/share/doc/{README,NVIDIA_Changelog,XF86Config.sample}
-%lang(de) %doc usr/share/doc/README.DE
+#%%lang(de) %doc usr/share/doc/README.DE
 %attr(755,root,root) %{_libdir}/libGL.so.*.*
 %attr(755,root,root) %{_libdir}/libGL.so
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
