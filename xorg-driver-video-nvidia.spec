@@ -9,7 +9,7 @@
 %define		_nv_ver		1.0
 %define		_nv_rel		6629
 %define		_min_x11	6.7.0
-%define		_rel		1
+%define		_rel		0.1
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -28,8 +28,6 @@ Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/N
 # Source1-size:	7333486
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
-Patch2:		%{name}-enable-pci.patch 
-Patch3:		%{name}-power-suspend.patch
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
@@ -173,8 +171,6 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %endif
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 
 %build
