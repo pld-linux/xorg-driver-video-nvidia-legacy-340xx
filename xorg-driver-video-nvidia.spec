@@ -234,9 +234,8 @@ install nvidia-smp.ko \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	-p /sbin/ldconfig
-%postun	-p /sbin/ldconfig
-
+%post	
+/sbin/ldconfig
 cat << EOF
 
  *******************************************************
@@ -250,10 +249,7 @@ cat << EOF
 
 EOF
 
-%postun 	-p /sbin/ldconfig
-
-%post 	st 	-p /sbin/ldconfig
-%postun	st 	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
 
 %post	-n kernel-video-nvidia
 %depmod %{_kernel_ver}
