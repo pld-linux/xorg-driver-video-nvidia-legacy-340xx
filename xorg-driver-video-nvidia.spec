@@ -22,6 +22,7 @@ Group:		X11/XFree86
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}.run
 # Source0-md5:	5432f919f0211ce36b854d87108d7db0
 Patch0:		%{name}-gcc34.patch
+Patch1:		%{name}-Makefile.patch
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
@@ -155,6 +156,7 @@ rm -rf NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}
 /bin/sh %{SOURCE0} --extract-only
 %setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}
 %patch0 -p1
+%patch1 -p1
 
 %build
 cd usr/src/nv/
