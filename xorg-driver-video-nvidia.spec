@@ -98,7 +98,7 @@ sterowników nvidii.
 %package progs
 Summary:	Tools for advanced control of nVidia graphic cards
 Summary(pl):	Narzêdzia do zarz±dzania kartami graficznymi nVidia
-Group:		Application/System
+Group:		Applications/System
 Obsoletes:	XFree86-driver-nvidia-progs
 Requires:	%{name} = %{version}-%{release}
 
