@@ -291,6 +291,7 @@ EOF
 %attr(755,root,root) %{_libdir}/libGL.so
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
+%dir /usr/%{_lib}/tls
 %attr(755,root,root) /usr/%{_lib}/libnvidia-tls.so.*.*.*
 %attr(755,root,root) /usr/%{_lib}/tls/libnvidia-tls.so.*.*.*
 %ifarch amd64
