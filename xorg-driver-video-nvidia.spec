@@ -2,13 +2,14 @@
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	smp		# without smp packages
+%bcond_without	kernel		# without kernel packages
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	tls		# install libraries with tls support
 #
 %define		_nv_ver		1.0
 %define		_nv_rel		6106
 %define		_min_x11	6.7.0
-%define		_rel		2
+%define		_rel		3
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -31,6 +32,7 @@ BuildRequires:	%{kgcc_package}
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRequires:	sed >= 4.0
 BuildRequires:	textutils
+#BuildRequires:	X11-devel >= %{_min_x11}	# disabled for now
 Requires:	X11-Xserver
 Requires:	X11-libs >= %{_min_x11}
 Requires:	X11-modules >= %{_min_x11}
@@ -39,7 +41,7 @@ Provides:	X11-OpenGL-core
 Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
 Provides:	XFree86-OpenGL-libGL
-Provides:	XFree86-driver-nvidia
+Provides:	X11-driver-nvidia
 Obsoletes:	Mesa
 Obsoletes:	X11-OpenGL-core
 Obsoletes:	X11-OpenGL-libGL
@@ -286,6 +288,7 @@ EOF
 %attr(755,root,root) %{_libdir}/modules/extensions/libglx.so*
 %attr(755,root,root) %{_libdir}/modules/drivers/nvidia_drv.o
 
+%if %{with kernel}
 %files -n kernel-video-nvidia
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/misc/*.ko*
@@ -294,6 +297,7 @@ EOF
 %files -n kernel-smp-video-nvidia
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/misc/*.ko*
+%endif
 %endif
 
 %files devel
