@@ -27,6 +27,9 @@ Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/N
 # Source1-size:	7333486
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
+Patch2:		%{name}-pci_x_class.patch
+Patch3:		%{name}-enable-pci.patch 
+Patch4:		%{name}-power-suspend.patch
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
@@ -170,6 +173,9 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %endif
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 
 %build
