@@ -7,9 +7,9 @@
 %bcond_with	tls		# install libraries with tls support
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		6111
+%define		_nv_rel		6629
 %define		_min_x11	6.7.0
-%define		_rel		5
+%define		_rel		1
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -21,16 +21,15 @@ Vendor:		nVidia Corp.
 Group:		X11/XFree86
 # why not pkg0!?
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	51e83be46f83c52102ccb8995b54f4e2
+# Source0-md5:	f7737c1e95371f37a4fd30da2f11e72c
 # Source0-size:	8167999
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	6c7b0c8b3ce5c34186e0c80042e6d046
+# Source1-md5:	652e69f549c81a7a3f2806daa74b9c36
 # Source1-size:	7333486
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
-Patch2:		%{name}-pci_x_class.patch
-Patch3:		%{name}-enable-pci.patch 
-Patch4:		%{name}-power-suspend.patch
+Patch2:		%{name}-enable-pci.patch 
+Patch3:		%{name}-power-suspend.patch
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
@@ -176,7 +175,6 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 
 %build
