@@ -182,24 +182,24 @@ sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 cd usr/src/nv/
 ln -sf Makefile.kbuild Makefile
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-    if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
-        exit 1
-    fi
-    rm -rf include
-    install -d include/{linux,config}
-    ln -sf %{_kernelsrcdir}/config-$cfg .config
-    ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
-    ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-    touch include/config/MARKER
-    %{__make} -C %{_kernelsrcdir} clean \
-	RCS_FIND_IGNORE="-name '*.ko' -o -name nv-kernel.o -o" \
-        M=$PWD O=$PWD \
-        %{?with_verbose:V=1}
-    %{__make} -C %{_kernelsrcdir} modules \
-	CC="%{__cc}" CPP="%{__cpp}" \
-        M=$PWD O=$PWD \
-        %{?with_verbose:V=1}
-    mv nvidia.ko nvidia-$cfg.ko
+	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
+		exit 1
+	fi
+	rm -rf include
+	install -d include/{linux,config}
+	ln -sf %{_kernelsrcdir}/config-$cfg .config
+	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
+	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
+	touch include/config/MARKER
+	%{__make} -C %{_kernelsrcdir} clean \
+		RCS_FIND_IGNORE="-name '*.ko' -o -name nv-kernel.o -o" \
+		M=$PWD O=$PWD \
+		%{?with_verbose:V=1}
+	%{__make} -C %{_kernelsrcdir} modules \
+		CC="%{__cc}" CPP="%{__cpp}" \
+		M=$PWD O=$PWD \
+		%{?with_verbose:V=1}
+	mv nvidia.ko nvidia-$cfg.ko
 done
 
 %install
