@@ -7,9 +7,9 @@
 %bcond_with	tls		# install libraries with tls support
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		6106
+%define		_nv_rel		6111
 %define		_min_x11	6.7.0
-%define		_rel		3
+%define		_rel		1
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -20,9 +20,9 @@ License:	nVidia Binary
 Vendor:		nVidia Corp.
 Group:		X11/XFree86
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	5432f919f0211ce36b854d87108d7db0
+# Source0-md5:	51e83be46f83c52102ccb8995b54f4e2
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	024f21a3fa134bee8339adac64bdc77a
+# Source1-md5:	6c7b0c8b3ce5c34186e0c80042e6d046
 Patch0:		%{name}-gcc34.patch
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
