@@ -6,10 +6,10 @@
 %bcond_with	tls		# install libraries with tls support
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		5336
-%define		_nv_pkg		pkg0
+%define		_nv_rel		6106
+%define		_nv_pkg		pkg1
 %define		_min_x11	6.7.0
-%define		_rel		4
+%define		_rel		1
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -20,9 +20,8 @@ License:	nVidia Binary
 Vendor:		nVidia Corp.
 Group:		X11/XFree86
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}.run
-# Source0-md5:	2ceffa20391d5471b8a483101563eccb
+# Source0-md5:	5432f919f0211ce36b854d87108d7db0
 Patch0:		%{name}-gcc34.patch
-Patch1:		%{name}-api_calls.patch
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
@@ -156,11 +155,10 @@ rm -rf NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}
 /bin/sh %{SOURCE0} --extract-only
 %setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-%{_nv_pkg}
 %patch0 -p1
-%patch1 -p1
 
 %build
 cd usr/src/nv/
-cp Makefile.kbuild Makefile
+ln -sf Makefile.kbuild Makefile
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
     if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
         exit 1
@@ -185,9 +183,10 @@ install -d $RPM_BUILD_ROOT%{_libdir}/modules/{drivers,extensions} \
 
 ln -sf $RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_prefix}/../lib
 
-install usr/lib%{?with_tls:/tls}/libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}
-install usr/lib%{?with_tls:/tls}/libGLcore.so.%{version} $RPM_BUILD_ROOT%{_libdir}
-install usr/X11R6/lib/modules/extensions%{?with_tls:/tls}/libglx.so.%{version} \
+install usr/bin/nvidia-settings $RPM_BUILD_ROOT%{_bindir}
+install usr/lib%{?with_tls:/tls}/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT%{_libdir}
+install usr/lib/libGL{,core}.so.%{version} $RPM_BUILD_ROOT%{_libdir}
+install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/modules/extensions
 
 install usr/X11R6/lib/modules/drivers/nvidia_drv.o $RPM_BUILD_ROOT%{_libdir}/modules/drivers
@@ -239,6 +238,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libGL.so
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
+%attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*.*
 %attr(755,root,root) /usr/%{_lib}/libGL.so.1
 %attr(755,root,root) /usr/%{_lib}/libGL.so
 %attr(755,root,root) %{_libdir}/modules/extensions/libglx.so*
@@ -261,6 +261,6 @@ rm -rf $RPM_BUILD_ROOT
 # -static
 %{_libdir}/libXvMCNVIDIA.a
 
-#%files progs
-#%defattr(755,root,root,755)
-#%{_bindir}/nvidia-settings
+%files progs
+%defattr(755,root,root,755)
+%{_bindir}/nvidia-settings
