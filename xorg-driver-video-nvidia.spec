@@ -246,6 +246,7 @@ cat << EOF
  *  You must install:                                  *
  *  kernel(24)(-smp)-video-nvidia-%{version}             *
  *  for this driver to work                            *
+ *                                                     *
  *******************************************************
 
 EOF
