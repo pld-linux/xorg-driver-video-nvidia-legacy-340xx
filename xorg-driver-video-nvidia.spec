@@ -6,9 +6,9 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		7167
+%define		_nv_rel		7174
 %define		_min_x11	6.7.0
-%define		_rel		2
+%define		_rel		1
 #
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
@@ -20,15 +20,13 @@ Vendor:		nVidia Corp.
 Group:		X11/XFree86
 # why not pkg0!?
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	d88d606873be255e8c4926961a1f09bf
+# Source0-md5:	e9840ae34ae9f5a3dc7d0fafe040c8af
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	a0433d841c41862af266300b589c12a7
+# Source1-md5:	125ec3ecc64202c6c27ef762a438d0f0
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
 Patch2:		%{name}-conftest.patch
 # http://www.minion.de/files/1.0-6629/
-Patch3:		NVIDIA_kernel-1.0-7167-1233959.diff
-Patch4:		NVIDIA_kernel-1.0-7167-1237815.diff
 URL:		http://www.nvidia.com/object/linux.html
 BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
@@ -172,8 +170,6 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p0
-%patch4 -p0
 sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 
 %build
