@@ -32,7 +32,7 @@ BuildConflicts:	XFree86-nvidia
 BuildRequires:	grep
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
 BuildRequires:	%{kgcc_package}
-BuildRequires:	rpmbuild(macros) >= 1.153
+BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	sed >= 4.0
 BuildRequires:	textutils
 #BuildRequires:	X11-devel >= %{_min_x11}	# disabled for now
@@ -51,12 +51,12 @@ Obsoletes:	XFree86-OpenGL-libGL
 Obsoletes:	XFree86-driver-nvidia
 Obsoletes:	XFree86-nvidia
 Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
-ExclusiveArch:	%{ix86} amd64
+ExclusiveArch:	%{ix86} %{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_noautoreqdep	libGL.so.1 libGLcore.so.1
 %define		_prefix		/usr/X11R6
-%ifarch amd64
+%ifarch %{x8664}
 %define		_libdir32	%{_prefix}/lib
 %endif
 
@@ -215,7 +215,7 @@ install usr/lib/tls/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT/usr/%{_lib}/tls
 install usr/lib/libGL{,core}.so.%{version} $RPM_BUILD_ROOT%{_libdir}
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/modules/extensions
-%ifarch amd64
+%ifarch %{x8664}
 # support for running 32-bit OpenGL applications on 64-bit AMD64 Linux installations
 #install -d $RPM_BUILD_ROOT%{_libdir32}
 #install usr/lib32%{?with_tls:/tls}/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT%{_libdir32}
@@ -291,7 +291,7 @@ EOF
 %dir /usr/%{_lib}/tls
 %attr(755,root,root) /usr/%{_lib}/libnvidia-tls.so.*.*.*
 %attr(755,root,root) /usr/%{_lib}/tls/libnvidia-tls.so.*.*.*
-%ifarch amd64
+%ifarch %{x8664}
 # support for running 32-bit OpenGL applications on 64-bit AMD64 Linux installations
 #dir %{_libdir32}
 #attr(755,root,root) %{_libdir32}/libGL.so.*.*
