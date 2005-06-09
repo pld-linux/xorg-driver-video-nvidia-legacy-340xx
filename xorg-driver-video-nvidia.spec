@@ -117,7 +117,6 @@ Summary(pl):	Modu³ j±dra dla obs³ugi kart graficznych nVidia
 Version:	%{_nv_ver}.%{_nv_rel}
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-PreReq:		modutils >= 2.3.18-2
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
 %{?with_dist_kernel:%requires_releq_kernel_up}
@@ -140,7 +139,6 @@ Summary(de):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
 Summary(pl):	Modu³ j±dra dla obs³ugi kart graficznych nVidia
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-PreReq:		modutils >= 2.3.18-2
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
 %{?with_dist_kernel:%requires_releq_kernel_smp}
