@@ -3,13 +3,29 @@
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	smp		# without smp packages
 %bcond_without	kernel		# without kernel packages
+%bcond_without	incall		# include all tarballs
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		7174
+%define		_nv_rel		7667
 %define		_min_x11	6.7.0
 %define		_rel		3
 #
+%define		need_x86	0
+%define		need_x8664	0
+%if %{with incall}
+%define		need_x86	1
+%define		need_x8664	1
+%else
+%ifarch %{ix86}
+%define		need_x86	1
+%endif
+%ifarch %{x8664}
+%define		need_x8664	1
+%endif
+%endif
+#
+
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
 Name:		X11-driver-nvidia
@@ -19,10 +35,14 @@ License:	nVidia Binary
 Vendor:		nVidia Corp.
 Group:		X11/XFree86
 # why not pkg0!?
-Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	e9840ae34ae9f5a3dc7d0fafe040c8af
-Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	125ec3ecc64202c6c27ef762a438d0f0
+%if %{need_x86}
+Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg0.run
+# Source0-md5:	1d062204da2902ae86154a03e1a40204
+%endif
+%if %{need_x8664}
+Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg0.run
+# Source1-md5:	fa4e143a3193c0bd9cd697eb8637b354
+%endif
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
 Patch2:		%{name}-conftest.patch
@@ -160,10 +180,10 @@ cd %{_builddir}
 rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1
+%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg0
 %else
 /bin/sh %{SOURCE1} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2
+%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg0
 %endif
 %patch0 -p1
 %patch1 -p1
@@ -280,7 +300,7 @@ EOF
 %files
 %defattr(644,root,root,755)
 %doc LICENSE
-%doc usr/share/doc/{README,NVIDIA_Changelog,XF86Config.sample}
+%doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample}
 #%%lang(de) %doc usr/share/doc/README.DE
 %attr(755,root,root) %{_libdir}/libGL.so.*.*
 %attr(755,root,root) %{_libdir}/libGL.so
@@ -323,4 +343,5 @@ EOF
 
 %files progs
 %defattr(644,root,root,755)
+%doc usr/share/doc/nvidia-settings-user-guide.txt
 %attr(755,root,root) %{_bindir}/nvidia-settings
