@@ -4,6 +4,7 @@
 %bcond_without	smp		# without smp packages
 %bcond_without	kernel		# without kernel packages
 %bcond_without	incall		# include all tarballs
+%bcond_without	userspace	# don't build userspace programs
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_nv_ver		1.0
@@ -222,6 +223,8 @@ done
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
+%if %{with userspace}
 install -d $RPM_BUILD_ROOT%{_libdir}/modules/{drivers,extensions} \
 	$RPM_BUILD_ROOT{/usr/include/GL,/usr/%{_lib}/tls,%{_bindir}}
 
@@ -253,6 +256,7 @@ ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
 # OpenGL ABI for Linux compatibility
 ln -sf %{_libdir}/libGL.so.1 $RPM_BUILD_ROOT/usr/%{_lib}/libGL.so.1
 ln -sf %{_libdir}/libGL.so $RPM_BUILD_ROOT/usr/%{_lib}/libGL.so
+%endif
 
 %if %{with kernel}
 cd usr/src/nv/
@@ -297,6 +301,7 @@ EOF
 %postun	-n kernel-smp-video-nvidia
 %depmod %{_kernel_ver}smp
 
+%if %{with userspace}
 %files
 %defattr(644,root,root,755)
 %doc LICENSE
@@ -321,6 +326,7 @@ EOF
 %attr(755,root,root) /usr/%{_lib}/libGL.so
 %attr(755,root,root) %{_libdir}/modules/extensions/libglx.so*
 %attr(755,root,root) %{_libdir}/modules/drivers/nvidia_drv.o
+%endif
 
 %if %{with kernel}
 %files -n kernel-video-nvidia
@@ -334,6 +340,7 @@ EOF
 %endif
 %endif
 
+%if %{with userspace}
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
@@ -345,3 +352,4 @@ EOF
 %defattr(644,root,root,755)
 %doc usr/share/doc/nvidia-settings-user-guide.txt
 %attr(755,root,root) %{_bindir}/nvidia-settings
+%endif
