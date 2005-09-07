@@ -8,9 +8,9 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		7667
+%define		_nv_rel		7676
 %define		_min_x11	6.7.0
-%define		_rel		3
+%define		_rel		1
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -38,11 +38,11 @@ Group:		X11/XFree86
 # why not pkg0!?
 %if %{need_x86}
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg0.run
-# Source0-md5:	1d062204da2902ae86154a03e1a40204
+# Source0-md5:	2474c5513006668b0fba401e042dc009
 %endif
 %if %{need_x8664}
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg0.run
-# Source1-md5:	fa4e143a3193c0bd9cd697eb8637b354
+# Source1-md5:	06a0a2d06c7f849510b4682d9d13946a
 %endif
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
