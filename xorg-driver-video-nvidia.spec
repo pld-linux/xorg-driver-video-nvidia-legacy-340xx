@@ -8,7 +8,7 @@
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		8174
+%define		_nv_rel		8178
 %define		_min_x11	6.7.0
 %define		_rel		0.1
 #
@@ -37,12 +37,12 @@ Vendor:		nVidia Corp.
 Group:		X11
 # why not pkg0!?
 %if %{need_x86}
-Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg0.run
-# Source0-md5:	38e9fb91c272fd9ae8b8672a4baa7fdf
+Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
+# Source0-md5:	bc9d459bfeee93735e3959de041635df
 %endif
 %if %{need_x8664}
-Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg0.run
-# Source1-md5:	c8e8a0665af084fd6457a48f620e1dca
+Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1.run
+# Source1-md5:	0da016f8d5138c1ee51b7fa375821574
 %endif
 Patch0:		%{name}-gcc34.patch
 Patch1:		%{name}-GL.patch
@@ -183,14 +183,14 @@ cd %{_builddir}
 rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg0
+%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1
 %else
 /bin/sh %{SOURCE1} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg0
+%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1
 %endif
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
+#%patch2 -p1
 sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 
 %build
