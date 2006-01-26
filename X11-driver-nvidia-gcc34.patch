@@ -9,17 +9,6 @@ diff -uNr NVIDIA-Linux-x86-1.0-5336-pkg1/usr/src/nv/nv.c NVIDIA-Linux-x86-1.0-53
  };
  
  static nv_file_private_t *
---- NVIDIA-Linux-x86_64-1.0-8178-pkg1/usr/src/nv/Makefile.kbuild.orig	2006-01-26 19:37:49.000000000 +0100
-+++ NVIDIA-Linux-x86_64-1.0-8178-pkg1/usr/src/nv/Makefile.kbuild	2006-01-26 19:22:54.000000000 +0100
-@@ -73,7 +73,7 @@
- #
- 
- EXTRA_CFLAGS += -I$(src)
--EXTRA_CFLAGS += -Wall -Wimplicit -Wreturn-type -Wswitch -Wformat -Wchar-subscripts -Wparentheses   -Wno-multichar  -Werror -O -fno-common -mno-red-zone -minline-all-stringops -MD $(DEFINES) $(INCLUDES) -Wsign-compare -Wno-cast-qual -Wno-error
-+EXTRA_CFLAGS += -Wall -Werror-implicit-function-declaration -Wreturn-type -Wswitch -Wformat -Wchar-subscripts -Wparentheses -Wno-multichar -O -fno-common -mno-red-zone -minline-all-stringops -MD $(DEFINES) $(INCLUDES) -Wsign-compare -Wno-cast-qual
- 
- #
- # We rely on these two definitions below; if they aren't set, we set them to
 --- NVIDIA-Linux-x86_64-1.0-8178-pkg1/usr/src/nv/conftest.sh.orig	2005-12-15 02:34:40.000000000 +0100
 +++ NVIDIA-Linux-x86_64-1.0-8178-pkg1/usr/src/nv/conftest.sh	2006-01-26 19:21:46.000000000 +0100
 @@ -23,7 +23,7 @@
