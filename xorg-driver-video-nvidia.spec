@@ -10,7 +10,7 @@
 %define		_nv_ver		1.0
 %define		_nv_rel		8178
 %define		_min_x11	6.7.0
-%define		_rel		2
+%define		_rel		0.1
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -26,10 +26,9 @@
 %endif
 %endif
 #
-
 Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
-Name:		X11-driver-nvidia
+Name:		xorg-driver-video-nvidia
 Version:	%{_nv_ver}.%{_nv_rel}
 Release:	%{_rel}
 License:	nVidia Binary
@@ -44,9 +43,8 @@ Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVID
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1.run
 # Source1-md5:	0da016f8d5138c1ee51b7fa375821574
 %endif
-Patch0:		%{name}-gcc34.patch
-Patch1:		%{name}-GL.patch
-Patch2:		%{name}-conftest.patch
+Patch0:		X11-driver-nvidia-gcc34.patch
+Patch1:		X11-driver-nvidia-GL.patch
 # http://www.minion.de/files/1.0-6629/
 URL:		http://www.nvidia.com/object/linux.html
 BuildRequires:	grep
@@ -78,10 +76,6 @@ ExclusiveArch:	%{ix86} %{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_noautoreqdep	libGL.so.1 libGLcore.so.1
-%define		_prefix		/usr/X11R6
-%ifarch %{x8664}
-%define		_libdir32	%{_prefix}/lib
-%endif
 
 %description
 This driver set adds improved 2D functionality to the Xorg/XFree86 X
@@ -190,8 +184,7 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %endif
 %patch0 -p1
 %patch1 -p1
-#%patch2 -p1
-sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
+echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> usr/src/nv/Makefile.kbuild
 
 %build
 %if %{with kernel}
@@ -201,27 +194,28 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
 		exit 1
 	fi
-	rm -rf include
-	install -d include/{linux,config}
-	ln -sf %{_kernelsrcdir}/config-$cfg .config
-	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
-	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg Module.symvers
-%if %{without dist_kernel}
-	ln -sf %{_kernelsrcdir}/scripts
+	install -d o/include/linux
+	ln -sf %{_kernelsrcdir}/config-$cfg o/.config
+	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers
+	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h
+%if %{with dist_kernel}
+	%{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+%else
+	install -d o/include/config
+	touch o/include/config/MARKER
+	ln -sf %{_kernelsrcdir}/scripts o/scripts
 %endif
-	touch include/config/MARKER
 	%{__make} -C %{_kernelsrcdir} clean \
 		RCS_FIND_IGNORE="-name '*.ko' -o -name nv-kernel.o -o" \
 		SYSSRC=%{_kernelsrcdir} \
-		SYSOUT=$PWD \
-		M=$PWD O=$PWD \
+		SYSOUT=$PWD/o \
+		M=$PWD O=$PWD/o \
 		%{?with_verbose:V=1}
 	%{__make} -C %{_kernelsrcdir} modules \
 		CC="%{__cc}" CPP="%{__cpp}" \
 		SYSSRC=%{_kernelsrcdir} \
-		SYSOUT=$PWD \
-		M=$PWD O=$PWD \
+		SYSOUT=$PWD/o \
+		M=$PWD O=$PWD/o \
 		%{?with_verbose:V=1}
 	mv nvidia.ko nvidia-$cfg.ko
 done
@@ -231,37 +225,34 @@ done
 rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
-install -d $RPM_BUILD_ROOT%{_libdir}/modules/{drivers,extensions} \
-	$RPM_BUILD_ROOT{/usr/include/GL,/usr/%{_lib}/tls,%{_bindir}}
-
-ln -sf $RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_prefix}/../lib
+install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,extensions} \
+	$RPM_BUILD_ROOT{%{_includedir}/GL,%{_libdir},%{_bindir}}
 
 install usr/bin/nvidia-settings $RPM_BUILD_ROOT%{_bindir}
-install usr/lib/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT/usr/%{_lib}
-install usr/lib/tls/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT/usr/%{_lib}/tls
-install usr/lib/libGL{,core}.so.%{version} $RPM_BUILD_ROOT%{_libdir}
+
+for f in \
+	usr/lib/tls/libnvidia-tls.so.%{version}		\
+	usr/lib/libGL{,core}.so.%{version}		\
+	usr/X11R6/lib/libXvMCNVIDIA.so.%{version}	\
+	usr/X11R6/lib/libXvMCNVIDIA.a			\
+; do
+	install $f $RPM_BUILD_ROOT%{_libdir}
+done
+
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
-	$RPM_BUILD_ROOT%{_libdir}/modules/extensions
-%ifarch %{x8664}
-# support for running 32-bit OpenGL applications on 64-bit AMD64 Linux installations
-#install -d $RPM_BUILD_ROOT%{_libdir32}
-#install usr/lib32%{?with_tls:/tls}/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT%{_libdir32}
-#install usr/lib32/libGL{,core}.so.%{version} $RPM_BUILD_ROOT%{_libdir32}
-%endif
+	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
+install usr/X11R6/lib/modules/drivers/nvidia_drv.o \
+	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers
 
-install usr/X11R6/lib/modules/drivers/nvidia_drv.o $RPM_BUILD_ROOT%{_libdir}/modules/drivers
-install usr/X11R6/lib/libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}
-install usr/X11R6/lib/libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
-install usr/include/GL/*.h	$RPM_BUILD_ROOT/usr/include/GL
-#install usr/bin/nvidia-settings $RPM_BUILD_ROOT%{_bindir}
+install usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
 
-ln -sf libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/libGL.so
-ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/modules/extensions/libglx.so
+ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
 ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
+ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA_dynamic.so.1
 
 # OpenGL ABI for Linux compatibility
-ln -sf %{_libdir}/libGL.so.1 $RPM_BUILD_ROOT/usr/%{_lib}/libGL.so.1
-ln -sf %{_libdir}/libGL.so $RPM_BUILD_ROOT/usr/%{_lib}/libGL.so
+ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libGL.so.1
+ln -sf libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/libGL.so
 %endif
 
 %if %{with kernel}
@@ -312,26 +303,17 @@ EOF
 %defattr(644,root,root,755)
 %doc LICENSE
 %doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample}
-#%%lang(de) %doc usr/share/doc/README.DE
-%attr(755,root,root) %{_libdir}/libGL.so.*.*
+# OpenGL ABI for Linux compatibility
 %attr(755,root,root) %{_libdir}/libGL.so
+%attr(755,root,root) %{_libdir}/libGL.so.1
+#
+%attr(755,root,root) %{_libdir}/libGL.so.*.*
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
-%dir /usr/%{_lib}/tls
-%attr(755,root,root) /usr/%{_lib}/libnvidia-tls.so.*.*.*
-%attr(755,root,root) /usr/%{_lib}/tls/libnvidia-tls.so.*.*.*
-%ifarch %{x8664}
-# support for running 32-bit OpenGL applications on 64-bit AMD64 Linux installations
-#dir %{_libdir32}
-#attr(755,root,root) %{_libdir32}/libGL.so.*.*
-#attr(755,root,root) %{_libdir32}/libGLcore.so.*.*
-#attr(755,root,root) %{_libdir32}/libXvMCNVIDIA.so.*.*
-#attr(755,root,root) %{_libdir32}/libnvidia-tls.so.*.*.*
-%endif
-%attr(755,root,root) /usr/%{_lib}/libGL.so.1
-%attr(755,root,root) /usr/%{_lib}/libGL.so
-%attr(755,root,root) %{_libdir}/modules/extensions/libglx.so*
-%attr(755,root,root) %{_libdir}/modules/drivers/nvidia_drv.o
+%attr(755,root,root) %{_libdir}/libXvMCNVIDIA_dynamic.so.1
+%attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*.*
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
+%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.o
 %endif
 
 %if %{with kernel}
