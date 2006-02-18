@@ -332,7 +332,7 @@ EOF
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
-/usr/include/GL/*.h
+%{_includedir}/GL/*.h
 # -static
 %{_libdir}/libXvMCNVIDIA.a
 
