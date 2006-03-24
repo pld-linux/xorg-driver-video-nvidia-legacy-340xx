@@ -7,10 +7,12 @@
 %bcond_without	userspace	# don't build userspace programs
 %bcond_with	verbose		# verbose build (V=1)
 #
+%define		no_install_post_strip 1
+#
 %define		_nv_ver		1.0
 %define		_nv_rel		8178
 %define		_min_x11	6.7.0
-%define		_rel		0.1
+%define		_rel		0.2
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -57,13 +59,14 @@ BuildRequires:	sed >= 4.0
 BuildRequires:	textutils
 #BuildRequires:	X11-devel >= %{_min_x11}	# disabled for now
 BuildConflicts:	XFree86-nvidia
-Requires:	X11-Xserver
-Requires:	X11-libs >= %{_min_x11}
-Requires:	X11-modules >= %{_min_x11}
+#Requires:	X11-Xserver
+#Requires:	X11-libs >= %{_min_x11}
+#Requires:	X11-modules >= %{_min_x11}
 Provides:	X11-OpenGL-core
 Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
 Provides:	XFree86-OpenGL-libGL
+Provides:	OpenGL
 Obsoletes:	Mesa
 Obsoletes:	X11-OpenGL-core
 Obsoletes:	X11-OpenGL-libGL
