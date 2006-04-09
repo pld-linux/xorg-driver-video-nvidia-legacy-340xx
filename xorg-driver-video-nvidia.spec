@@ -7,12 +7,10 @@
 %bcond_without	userspace	# don't build userspace programs
 %bcond_with	verbose		# verbose build (V=1)
 #
-%define		no_install_post_strip 1
-#
 %define		_nv_ver		1.0
-%define		_nv_rel		8178
+%define		_nv_rel		8756
 %define		_min_x11	6.7.0
-%define		_rel		0.2
+%define		_rel		0.1
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -39,13 +37,13 @@ Group:		X11
 # why not pkg0!?
 %if %{need_x86}
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	bc9d459bfeee93735e3959de041635df
+# Source0-md5:	67293549b90f549ca9210743eaa5b09c
 %endif
 %if %{need_x8664}
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source1-md5:	0da016f8d5138c1ee51b7fa375821574
+# Source1-md5:	cbefbe43bca916f536872a994da8dcec
 %endif
-Patch0:		X11-driver-nvidia-gcc34.patch
+#Patch0:		X11-driver-nvidia-gcc34.patch
 Patch1:		X11-driver-nvidia-GL.patch
 # http://www.minion.de/files/1.0-6629/
 URL:		http://www.nvidia.com/object/linux.html
@@ -57,16 +55,14 @@ BuildRequires:	%{kgcc_package}
 BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	sed >= 4.0
 BuildRequires:	textutils
-#BuildRequires:	X11-devel >= %{_min_x11}	# disabled for now
 BuildConflicts:	XFree86-nvidia
-#Requires:	X11-Xserver
-#Requires:	X11-libs >= %{_min_x11}
-#Requires:	X11-modules >= %{_min_x11}
 Provides:	X11-OpenGL-core
 Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
 Provides:	XFree86-OpenGL-libGL
-Provides:	OpenGL
+Provides:	OpenGL = 1.5
+Provides:	OpenGL-GLX
+Provides:	xorg-xserver-modules-libglx
 Obsoletes:	Mesa
 Obsoletes:	X11-OpenGL-core
 Obsoletes:	X11-OpenGL-libGL
@@ -106,6 +102,8 @@ Summary(pl):	Pliki nag³ówkowe OpenGL dla systemu X11R6 (tylko gl?.h)
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Provides:	OpenGL-devel-base
+Provides:	OpenGL-devel = 1.5
+Provides:	OpenGL-GLX-devel
 Obsoletes:	OpenGL-devel-base
 Obsoletes:	XFree86-driver-nvidia-devel
 Conflicts:	XFree86-OpenGL-devel < 4.3.99.902-0.3
@@ -185,7 +183,7 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 /bin/sh %{SOURCE1} --extract-only
 %setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1
 %endif
-%patch0 -p1
+#%patch0 -p1
 %patch1 -p1
 echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> usr/src/nv/Makefile.kbuild
 
