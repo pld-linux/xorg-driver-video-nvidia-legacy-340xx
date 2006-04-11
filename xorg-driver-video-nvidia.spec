@@ -56,6 +56,7 @@ BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	sed >= 4.0
 BuildRequires:	textutils
 BuildConflicts:	XFree86-nvidia
+Requires:	xorg-xserver-server
 Provides:	X11-OpenGL-core
 Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
