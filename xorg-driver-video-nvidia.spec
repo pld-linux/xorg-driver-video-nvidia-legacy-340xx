@@ -32,7 +32,6 @@ Name:		xorg-driver-video-nvidia
 Version:	%{_nv_ver}.%{_nv_rel}
 Release:	%{_rel}
 License:	nVidia Binary
-Vendor:		nVidia Corp.
 Group:		X11
 # why not pkg0!?
 %if %{need_x86}
@@ -43,26 +42,24 @@ Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVID
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1.run
 # Source1-md5:	cbefbe43bca916f536872a994da8dcec
 %endif
-#Patch0:		X11-driver-nvidia-gcc34.patch
+#Patch0:	X11-driver-nvidia-gcc34.patch
 Patch1:		X11-driver-nvidia-GL.patch
 # http://www.minion.de/files/1.0-6629/
 URL:		http://www.nvidia.com/object/linux.html
-BuildRequires:	grep
 %if %{with kernel}
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
+%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 %endif
 BuildRequires:	%{kgcc_package}
 BuildRequires:	rpmbuild(macros) >= 1.213
 BuildRequires:	sed >= 4.0
-BuildRequires:	textutils
 BuildConflicts:	XFree86-nvidia
 Requires:	xorg-xserver-server
+Provides:	OpenGL = 1.5
+Provides:	OpenGL-GLX
 Provides:	X11-OpenGL-core
 Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
 Provides:	XFree86-OpenGL-libGL
-Provides:	OpenGL = 1.5
-Provides:	OpenGL-GLX
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	Mesa
 Obsoletes:	X11-OpenGL-core
@@ -102,9 +99,9 @@ Summary:	OpenGL for X11R6 development (only gl?.h)
 Summary(pl):	Pliki nag³ówkowe OpenGL dla systemu X11R6 (tylko gl?.h)
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Provides:	OpenGL-devel-base
-Provides:	OpenGL-devel = 1.5
 Provides:	OpenGL-GLX-devel
+Provides:	OpenGL-devel = 1.5
+Provides:	OpenGL-devel-base
 Obsoletes:	OpenGL-devel-base
 Obsoletes:	XFree86-driver-nvidia-devel
 Conflicts:	XFree86-OpenGL-devel < 4.3.99.902-0.3
