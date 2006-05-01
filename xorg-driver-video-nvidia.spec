@@ -7,10 +7,12 @@
 %bcond_without	userspace	# don't build userspace programs
 %bcond_with	verbose		# verbose build (V=1)
 #
+%define		no_install_post_strip 1
+#
 %define		_nv_ver		1.0
 %define		_nv_rel		8756
 %define		_min_x11	6.7.0
-%define		_rel		0.1
+%define		_rel		0.2
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -44,6 +46,7 @@ Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/N
 %endif
 #Patch0:	X11-driver-nvidia-gcc34.patch
 Patch1:		X11-driver-nvidia-GL.patch
+Patch2:		X11-driver-nvidia-desktop.patch
 # http://www.minion.de/files/1.0-6629/
 URL:		http://www.nvidia.com/object/linux.html
 %if %{with kernel}
@@ -183,6 +186,7 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %endif
 #%patch0 -p1
 %patch1 -p1
+%patch2 -p1
 echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> usr/src/nv/Makefile.kbuild
 
 %build
@@ -225,9 +229,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,extensions} \
-	$RPM_BUILD_ROOT{%{_includedir}/GL,%{_libdir},%{_bindir}}
+	$RPM_BUILD_ROOT{%{_includedir}/GL,%{_libdir},%{_bindir},%{_mandir}/man1} \
+	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}}
 
-install usr/bin/nvidia-settings $RPM_BUILD_ROOT%{_bindir}
+install usr/bin/nvidia-{settings,xconfig} $RPM_BUILD_ROOT%{_bindir}
+install usr/share/man/man1/nvidia-{settings,xconfig}.* $RPM_BUILD_ROOT%{_mandir}/man1
+install usr/share/applications/nvidia-settings.desktop $RPM_BUILD_ROOT%{_desktopdir}
+install usr/share/doc/nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
 
 for f in \
 	usr/lib/tls/libnvidia-tls.so.%{version}		\
@@ -301,7 +309,7 @@ EOF
 %files
 %defattr(644,root,root,755)
 %doc LICENSE
-%doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample}
+%doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample,html}
 # OpenGL ABI for Linux compatibility
 %attr(755,root,root) %{_libdir}/libGL.so
 %attr(755,root,root) %{_libdir}/libGL.so.1
@@ -337,6 +345,9 @@ EOF
 
 %files progs
 %defattr(644,root,root,755)
-%doc usr/share/doc/nvidia-settings-user-guide.txt
 %attr(755,root,root) %{_bindir}/nvidia-settings
+%attr(755,root,root) %{_bindir}/nvidia-xconfig
+%{_desktopdir}/nvidia-settings.desktop
+%{_mandir}/man1/nvidia-*
+%{_pixmapsdir}/nvidia-settings.png
 %endif
