@@ -41,7 +41,7 @@ Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVID
 %endif
 %if %{need_x8664}
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	73a12a4933c57941a7a8b7c1186f8b93
+# Source1-md5:	5eb0b27342fd726fbbdd1d99eadbd0e7
 %endif
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
