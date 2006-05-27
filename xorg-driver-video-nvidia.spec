@@ -35,19 +35,16 @@ Version:	%{_nv_ver}.%{_nv_rel}
 Release:	%{_rel}
 License:	nVidia Binary
 Group:		X11
-# why not pkg0!?
 %if %{need_x86}
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
 # Source0-md5:	86bcf4a3a9d441dff9e25b82ec8a6060
 %endif
 %if %{need_x8664}
-Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1.run
+Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
 # Source1-md5:	73a12a4933c57941a7a8b7c1186f8b93
 %endif
-#Patch0:	X11-driver-nvidia-gcc34.patch
-Patch1:		X11-driver-nvidia-GL.patch
-Patch2:		X11-driver-nvidia-desktop.patch
-# http://www.minion.de/files/1.0-6629/
+Patch0:		X11-driver-nvidia-GL.patch
+Patch1:		X11-driver-nvidia-desktop.patch
 URL:		http://www.nvidia.com/object/linux.html
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
@@ -182,11 +179,10 @@ rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1
 %else
 /bin/sh %{SOURCE1} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1
+%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2
 %endif
-#%patch0 -p1
+%patch0 -p1
 %patch1 -p1
-%patch2 -p1
 echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> usr/src/nv/Makefile.kbuild
 
 %build
