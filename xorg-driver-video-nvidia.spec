@@ -10,7 +10,7 @@
 %define		no_install_post_strip 1
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		8762
+%define		_nv_rel		8774
 %define		_min_x11	6.7.0
 %define		_rel		0.1
 #
@@ -37,11 +37,11 @@ License:	nVidia Binary
 Group:		X11
 %if %{need_x86}
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	86bcf4a3a9d441dff9e25b82ec8a6060
+# Source0-md5:	eb01a4372096ee7799e6560cf568c1c2
 %endif
 %if %{need_x8664}
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	5eb0b27342fd726fbbdd1d99eadbd0e7
+# Source1-md5:	1f569a860caf1c4314444536c7e659dd
 %endif
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
@@ -228,10 +228,10 @@ install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,extensions} \
 	$RPM_BUILD_ROOT{%{_includedir}/GL,%{_libdir},%{_bindir},%{_mandir}/man1} \
 	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}}
 
-install usr/bin/nvidia-{settings,xconfig} $RPM_BUILD_ROOT%{_bindir}
+install usr/bin/nvidia-{settings,xconfig,bug-report.sh} $RPM_BUILD_ROOT%{_bindir}
 install usr/share/man/man1/nvidia-{settings,xconfig}.* $RPM_BUILD_ROOT%{_mandir}/man1
 install usr/share/applications/nvidia-settings.desktop $RPM_BUILD_ROOT%{_desktopdir}
-install usr/share/doc/nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
+install usr/share/pixmaps/nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
 
 for f in \
 	usr/lib/tls/libnvidia-tls.so.%{version}		\
@@ -343,6 +343,7 @@ EOF
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/nvidia-settings
 %attr(755,root,root) %{_bindir}/nvidia-xconfig
+%attr(755,root,root) %{_bindir}/nvidia-bug-report.sh
 %{_desktopdir}/nvidia-settings.desktop
 %{_mandir}/man1/nvidia-*
 %{_pixmapsdir}/nvidia-settings.png
