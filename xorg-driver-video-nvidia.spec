@@ -43,6 +43,7 @@ Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVID
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
 # Source1-md5:	1f569a860caf1c4314444536c7e659dd
 %endif
+Source2:	X11-driver-nvidia-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
 URL:		http://www.nvidia.com/object/linux.html
@@ -226,12 +227,13 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with userspace}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,extensions} \
 	$RPM_BUILD_ROOT{%{_includedir}/GL,%{_libdir},%{_bindir},%{_mandir}/man1} \
-	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir}}
+	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir},/etc/X11/xinit/xinitrc.d}
 
 install usr/bin/nvidia-{settings,xconfig,bug-report.sh} $RPM_BUILD_ROOT%{_bindir}
 install usr/share/man/man1/nvidia-{settings,xconfig}.* $RPM_BUILD_ROOT%{_mandir}/man1
 install usr/share/applications/nvidia-settings.desktop $RPM_BUILD_ROOT%{_desktopdir}
 install usr/share/pixmaps/nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/nvidia-settings.sh
 
 for f in \
 	usr/lib/tls/libnvidia-tls.so.%{version}		\
@@ -344,6 +346,7 @@ EOF
 %attr(755,root,root) %{_bindir}/nvidia-settings
 %attr(755,root,root) %{_bindir}/nvidia-xconfig
 %attr(755,root,root) %{_bindir}/nvidia-bug-report.sh
+%attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
 %{_desktopdir}/nvidia-settings.desktop
 %{_mandir}/man1/nvidia-*
 %{_pixmapsdir}/nvidia-settings.png
