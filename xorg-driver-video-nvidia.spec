@@ -43,7 +43,7 @@ Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVID
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
 # Source1-md5:	1f569a860caf1c4314444536c7e659dd
 %endif
-Source2:	X11-driver-nvidia-xinitrc.sh
+Source2:	%{name}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
 URL:		http://www.nvidia.com/object/linux.html
