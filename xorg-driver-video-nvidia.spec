@@ -51,7 +51,7 @@ URL:		http://www.nvidia.com/object/linux.html
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
 %endif
 BuildRequires:	%{kgcc_package}
-BuildRequires:	rpmbuild(macros) >= 1.213
+BuildRequires:	rpmbuild(macros) >= 1.308
 BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	xorg-xserver-server
