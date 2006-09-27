@@ -246,8 +246,8 @@ done
 
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
-#install usr/X11R6/lib/modules/drivers/nvidia_drv.o \
-#	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers
+install usr/X11R6/lib/modules/drivers/nvidia_drv.so \
+	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers
 
 install usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
 
@@ -318,7 +318,7 @@ EOF
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA_dynamic.so.1
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
-#%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.o
+%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %endif
 
 %if %{with kernel}
