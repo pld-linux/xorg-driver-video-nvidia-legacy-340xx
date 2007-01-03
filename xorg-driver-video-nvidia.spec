@@ -10,9 +10,9 @@
 %define		no_install_post_strip 1
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		9742
+%define		_nv_rel		9746
 %define		_min_x11	6.7.0
-%define		_rel		0.1
+%define		_rel		1
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -36,12 +36,12 @@ Release:	%{_rel}
 License:	nVidia Binary
 Group:		X11
 %if %{need_x86}
-Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg0.run
-# Source0-md5:	3c8ed949aae2b9934518f8a9d94fc6e2
+Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
+# Source0-md5:	cf0cdbd9099a6df028de429044e7f4da
 %endif
 %if %{need_x8664}
 Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	667ba4ad2201a0b43d9e1d8637106b4a
+# Source1-md5:	c0afc66e1c21a9a54ba6719b8edd3166
 %endif
 Source2:	%{name}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
@@ -177,7 +177,7 @@ cd %{_builddir}
 rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
 %ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg0
+%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1
 %else
 /bin/sh %{SOURCE1} --extract-only
 %setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2
@@ -215,6 +215,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/nvidia-settings.sh
 
 for f in \
 	usr/lib/tls/libnvidia-tls.so.%{version}		\
+	usr/lib/libnvidia-cfg.so.%{version}		\
 	usr/lib/libGL{,core}.so.%{version}		\
 	usr/X11R6/lib/libXvMCNVIDIA.so.%{version}	\
 	usr/X11R6/lib/libXvMCNVIDIA.a			\
@@ -226,6 +227,8 @@ install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
 install usr/X11R6/lib/modules/drivers/nvidia_drv.so \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers
+install usr/X11R6/lib/modules/libnvidia-wfb.so.%{version} \
+	$RPM_BUILD_ROOT%{_libdir}/xorg/modules
 
 install usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
 
@@ -287,9 +290,11 @@ EOF
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA_dynamic.so.1
+%attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*.*
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
+%attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
 %endif
 
 %if %{with kernel}
