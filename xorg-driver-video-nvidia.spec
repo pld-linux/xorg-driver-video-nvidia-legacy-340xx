@@ -57,16 +57,12 @@ BuildConflicts:	XFree86-nvidia
 Requires:	xorg-xserver-server
 Provides:	OpenGL = 1.5
 Provides:	OpenGL-GLX
-Provides:	X11-OpenGL-core
-Provides:	X11-OpenGL-libGL
-Provides:	XFree86-OpenGL-core
-Provides:	XFree86-OpenGL-libGL
 Provides:	xorg-xserver-modules-libglx
 Obsoletes:	Mesa
-Obsoletes:	X11-OpenGL-core
-Obsoletes:	X11-OpenGL-libGL
-Obsoletes:	XFree86-OpenGL-core
-Obsoletes:	XFree86-OpenGL-libGL
+Obsoletes:	X11-OpenGL-core < 1:7.0.0
+Obsoletes:	X11-OpenGL-libGL < 1:7.0.0
+Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
+Obsoletes:	XFree86-OpenGL-libGL < 1:7.0.0
 Obsoletes:	XFree86-driver-nvidia
 Obsoletes:	XFree86-nvidia
 Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
