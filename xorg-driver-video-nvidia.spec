@@ -232,6 +232,7 @@ install usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
 ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
 ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA_dynamic.so.1
+ln -sf libnvidia-wfb.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/wfb.so
 
 # OpenGL ABI for Linux compatibility
 ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libGL.so.1
@@ -290,6 +291,7 @@ EOF
 %attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*.*
+%attr(755,root,root) %{_libdir}/xorg/modules/wfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
 %endif
