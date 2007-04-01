@@ -27,8 +27,8 @@
 %endif
 %endif
 #
-Summary:	Linux Drivers for nVidia TNT/TNT2/GeForce/Quadro Chips
-Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia TNT/TNT2/GeForce/Quadro
+Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
+Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		xorg-driver-video-nvidia
 Version:	%{_nv_ver}.%{_nv_rel}
 Release:	%{_rel}
@@ -72,24 +72,28 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautoreqdep	libGL.so.1 libGLcore.so.1
 
 %description
-This driver set adds improved 2D functionality to the Xorg/XFree86 X
-server as well as high performance OpenGL acceleration, AGP support,
-support for most flat panels, and 2D multiple monitor support.
+This driver set adds improved 2D functionality to the Xorg X server as
+well as high performance OpenGL acceleration, AGP support, support for
+most flat panels, and 2D multiple monitor support. Supported hardware:
+modern NVIDIA GeForce (from GeForce2 MX) and Quadro (Quadro4 and up)
+based graphics accelerators.
 
-Hardware: nVidia TNT, TNT2, GeForce, or Quadro based graphics
-accelerator. The nVidia NV1 and RIVA 128/128ZX chips are supported in
-the base Xorg/XFree86 install and are not supported by this driver
-set.
+The older graphics chips are unsupported:
+- NV1 and RIVA 128/128ZX chips are supported in the base Xorg install
+  (nv driver)
+- TNT/TNT2/GeForce 256/GeForce2 Ultra/Quadro2 are suported by -legacy
+  drivers.
 
 %description -l pl.UTF-8
-Usprawnione sterowniki dla kart graficznych nVidia do serwera
-Xorg/XFree86, dające wysokowydajną akcelerację OpenGL, obsługę AGP i
-wielu monitorów 2D.
+Usprawnione sterowniki dla kart graficznych nVidia do serwera Xorg,
+dające wysokowydajną akcelerację OpenGL, obsługę AGP i wielu monitorów
+2D. Obsługują w miarę nowe karty NVIDIA GeForce (od wersji GeForce2
+MX) oraz Quadro (od wersji Quadro4).
 
-Obsługują karty nVidia TNT/TNT2/GeForce/Quadro do serwera
-Xorg/XFree86; Karty nVidia NV1 i Riva 128/128ZX są obsługiwane przez
-sterownik nv z pakietów Xorg/XFree8 - NIE są obsługiwane przez ten
-pakiet.
+Starsze układy graficzne nie są obsługiwane przez ten pakiet:
+- NV1 i RIVA 128/128ZX są obsługiwane przez sterownik nv z Xorg
+- TNT/TNT2/GeForce 256/GeForce 2 Ultra/Quadro 2 są obsługiwane przez
+  sterowniki -legacy
 
 %package devel
 Summary:	OpenGL for X11R6 development (only gl?.h)
