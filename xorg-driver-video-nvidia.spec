@@ -9,9 +9,9 @@
 %define		no_install_post_strip 1
 #
 %define		_nv_ver		1.0
-%define		_nv_rel		9755
+%define		_nv_rel		9762
 %define		_min_x11	6.7.0
-%define		_rel		2
+%define		_rel		1
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -36,11 +36,11 @@ License:	nVidia Binary
 Group:		X11
 %if %{need_x86}
 Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	594a47bd7e85343bd482775482cd1dce
+# Source0-md5:	9e85cd92befcc04fa6cc668da57d0f30
 %endif
 %if %{need_x8664}
 Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	88eb6b856ab201dc00663165e10109f9
+# Source1-md5:	988a4714ef6741ffbb8432364b0c90c7
 %endif
 Source2:	%{name}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
