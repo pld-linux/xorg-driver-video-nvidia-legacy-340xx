@@ -8,10 +8,10 @@
 #
 %define		no_install_post_strip 1
 #
-%define		_nv_ver		1.0
-%define		_nv_rel		9762
+%define		_nv_ver		100
+%define		_nv_rel		14.09
 %define		_min_x11	6.7.0
-%define		_rel		3
+%define		_rel		1
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -35,12 +35,12 @@ Release:	%{_rel}
 License:	nVidia Binary
 Group:		X11
 %if %{need_x86}
-Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	9e85cd92befcc04fa6cc668da57d0f30
+Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}.%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}.%{_nv_rel}-pkg1.run
+# Source0-md5:	7b021b460ce1b1c533d97a51f2dde133
 %endif
 %if %{need_x8664}
-Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2.run
-# Source1-md5:	988a4714ef6741ffbb8432364b0c90c7
+Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}.%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}.%{_nv_rel}-pkg2.run
+# Source1-md5:	0717c0468378647f1e4468c12c1ed72a
 %endif
 Source2:	%{name}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
@@ -152,13 +152,13 @@ sterownik nVidii dla Xorg/XFree86.
 
 %prep
 cd %{_builddir}
-rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
+rm -rf NVIDIA-Linux-x86*-%{_nv_ver}.%{_nv_rel}-pkg*
 %ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1
+%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}.%{_nv_rel}-pkg1
 %else
 /bin/sh %{SOURCE1} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg2
+%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}.%{_nv_rel}-pkg2
 %endif
 %patch0 -p1
 %patch1 -p1
