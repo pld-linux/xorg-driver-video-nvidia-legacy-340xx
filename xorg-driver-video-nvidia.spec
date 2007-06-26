@@ -230,16 +230,9 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/ldconfig
 cat << EOF
-
- *******************************************************
- *                                                     *
- *  NOTE:                                              *
- *  You must install:                                  *
- *  kernel(24)-video-nvidia-%{version}             *
- *  for this driver to work                            *
- *                                                     *
- *******************************************************
-
+NOTE: You must install:
+kernel-video-nvidia-%{version}
+for this driver to work
 EOF
 
 %postun	-p /sbin/ldconfig
