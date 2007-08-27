@@ -55,7 +55,7 @@ BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	xorg-xserver-server
 Provides:	OpenGL = 1.5
-Provides:	OpenGL-GLX
+Provides:	OpenGL-GLX = 1.4
 Provides:	xorg-xserver-libglx
 Obsoletes:	Mesa
 Obsoletes:	Mesa-libGL
@@ -96,23 +96,36 @@ Starsze układy graficzne nie są obsługiwane przez ten pakiet:
   sterowniki -legacy
 
 %package devel
-Summary:	OpenGL for X11R6 development (only gl?.h)
-Summary(pl.UTF-8):	Pliki nagłówkowe OpenGL dla systemu X11R6 (tylko gl?.h)
+Summary:	OpenGL (GL and GLX) header files
+Summary(pl.UTF-8):	Pliki nagłówkowe OpenGL (GL i GLX)
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Provides:	OpenGL-GLX-devel
+Provides:	OpenGL-GLX-devel = 1.4
 Provides:	OpenGL-devel = 1.5
-Provides:	OpenGL-devel-base
-Obsoletes:	OpenGL-devel-base
+Obsoletes:	X11-OpenGL-devel-base
+Obsoletes:	XFree86-OpenGL-devel-base
 Obsoletes:	XFree86-driver-nvidia-devel
 Conflicts:	XFree86-OpenGL-devel < 4.3.99.902-0.3
 
 %description devel
-Base headers (only gl?.h) for OpenGL for X11R6 for nvidia drivers.
+OpenGL header files (GL and GLX only) for NVIDIA OpenGL
+implementation.
 
 %description devel -l pl.UTF-8
-Podstawowe pliki nagłówkowe (tylko gl?.h) OpenGL dla systemu X11R6 dla
-sterowników nvidii.
+Pliki nagłówkowe OpenGL (tylko GL i GLX) dla implementacji OpenGL
+firmy NVIDIA.
+
+%package static
+Summary:	Static XvMCNVIDIA library
+Summary(pl.UTF-8):	Statyczna biblioteka XvMCNVIDIA
+Group:		X11/Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static XvMCNVIDIA library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka XvMCNVIDIA.
 
 %package progs
 Summary:	Tools for advanced control of nVidia graphic cards
@@ -248,11 +261,11 @@ EOF
 %defattr(644,root,root,755)
 %doc LICENSE
 %doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample,html}
-# OpenGL ABI for Linux compatibility
-%attr(755,root,root) %{_libdir}/libGL.so
-%attr(755,root,root) %{_libdir}/libGL.so.1
-#
 %attr(755,root,root) %{_libdir}/libGL.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libGL.so.1
+# symlink for binary apps which fail to conform Linux OpenGL ABI
+# (and dlopen libGL.so instead of libGL.so.1)
+%attr(755,root,root) %{_libdir}/libGL.so
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA_dynamic.so.1
@@ -262,20 +275,17 @@ EOF
 %attr(755,root,root) %{_libdir}/xorg/modules/wfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
-%endif
 
-%if %{with kernel}
-%files -n kernel%{_alt_kernel}-video-nvidia
-%defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/misc/*.ko*
-%endif
-
-%if %{with userspace}
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
-%{_includedir}/GL/*.h
-# -static
+%{_includedir}/GL/gl.h
+%{_includedir}/GL/glext.h
+%{_includedir}/GL/glx.h
+%{_includedir}/GL/glxext.h
+
+%files static
+%defattr(644,root,root,755)
 %{_libdir}/libXvMCNVIDIA.a
 
 %files progs
@@ -287,4 +297,10 @@ EOF
 %{_desktopdir}/nvidia-settings.desktop
 %{_mandir}/man1/nvidia-*
 %{_pixmapsdir}/nvidia-settings.png
+%endif
+
+%if %{with kernel}
+%files -n kernel%{_alt_kernel}-video-nvidia
+%defattr(644,root,root,755)
+/lib/modules/%{_kernel_ver}/misc/*.ko*
 %endif
