@@ -54,6 +54,7 @@ BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	xorg-xserver-server
+Requires:	xorg-xserver-server(videodrv-abi) = 1.2
 Provides:	OpenGL = 2.1
 Provides:	OpenGL-GLX = 1.4
 Provides:	xorg-xserver-libglx
