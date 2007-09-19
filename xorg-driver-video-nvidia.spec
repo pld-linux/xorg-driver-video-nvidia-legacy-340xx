@@ -195,9 +195,10 @@ mv nv-kernel.o{,.bin}
 rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
-install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,extensions} \
+install -d $RPM_BUILD_ROOT%{_libdir}/{nvidia,xorg/modules/{drivers,extensions}} \
 	$RPM_BUILD_ROOT{%{_includedir}/GL,%{_libdir},%{_bindir},%{_mandir}/man1} \
-	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir},/etc/X11/xinit/xinitrc.d}
+	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir},/etc/X11/xinit/xinitrc.d} \
+	$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d
 
 install usr/bin/nvidia-{settings,xconfig,bug-report.sh} $RPM_BUILD_ROOT%{_bindir}
 install usr/share/man/man1/nvidia-{settings,xconfig}.* $RPM_BUILD_ROOT%{_mandir}/man1
@@ -210,10 +211,10 @@ for f in \
 	usr/lib/libnvidia-cfg.so.%{version}		\
 	usr/lib/libGL{,core}.so.%{version}		\
 	usr/X11R6/lib/libXvMCNVIDIA.so.%{version}	\
-	usr/X11R6/lib/libXvMCNVIDIA.a			\
 ; do
-	install $f $RPM_BUILD_ROOT%{_libdir}
+	install $f $RPM_BUILD_ROOT%{_libdir}/nvidia
 done
+install usr/X11R6/lib/libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
 
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
@@ -225,13 +226,15 @@ install usr/X11R6/lib/modules/libnvidia-wfb.so.%{version} \
 install usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
 
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
-ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
-ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA_dynamic.so.1
+ln -sf nvidia/libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
+ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
 ln -sf libnvidia-wfb.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/wfb.so
 
 # OpenGL ABI for Linux compatibility
-ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libGL.so.1
-ln -sf libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/libGL.so
+ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/nvidia/libGL.so.1
+ln -sf nvidia/libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/libGL.so
+
+echo %{_libdir}/nvidia >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
 %endif
 
 %if %{with kernel}
@@ -262,16 +265,14 @@ EOF
 %defattr(644,root,root,755)
 %doc LICENSE
 %doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample,html}
-%attr(755,root,root) %{_libdir}/libGL.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libGL.so.1
-# symlink for binary apps which fail to conform Linux OpenGL ABI
-# (and dlopen libGL.so instead of libGL.so.1)
-%attr(755,root,root) %{_libdir}/libGL.so
-%attr(755,root,root) %{_libdir}/libGLcore.so.*.*
-%attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
-%attr(755,root,root) %{_libdir}/libXvMCNVIDIA_dynamic.so.1
-%attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*.*
-%attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*.*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ld.so.conf.d/nvidia.conf
+%attr(755,root,root) %{_libdir}/nvidia/libGL.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/nvidia/libGL.so.1
+%attr(755,root,root) %{_libdir}/nvidia/libGLcore.so.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA.so.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/wfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
@@ -279,6 +280,7 @@ EOF
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libGL.so
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
 %dir %{_includedir}/GL
 %{_includedir}/GL/gl.h
