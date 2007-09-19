@@ -11,7 +11,7 @@
 %define		_nv_ver		100
 %define		_nv_rel		14.19
 %define		_min_x11	6.7.0
-%define		_rel		1
+%define		_rel		2
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -58,8 +58,6 @@ Requires:	xorg-xserver-server(videodrv-abi) = 2.0
 Provides:	OpenGL = 2.1
 Provides:	OpenGL-GLX = 1.4
 Provides:	xorg-xserver-libglx
-Obsoletes:	Mesa
-Obsoletes:	Mesa-libGL
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	X11-OpenGL-libGL < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
@@ -266,6 +264,7 @@ EOF
 %doc LICENSE
 %doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample,html}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ld.so.conf.d/nvidia.conf
+%dir %{_libdir}/nvidia
 %attr(755,root,root) %{_libdir}/nvidia/libGL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libGL.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libGLcore.so.*.*
