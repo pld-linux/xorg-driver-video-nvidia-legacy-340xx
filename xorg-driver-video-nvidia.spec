@@ -272,6 +272,11 @@ NOTE: You must install:
 kernel-video-nvidia-%{version}
 for this driver to work
 EOF
+%if %{with multigl}
+if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
+	ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
+fi
+%endif
 
 %postun	-p /sbin/ldconfig
 
