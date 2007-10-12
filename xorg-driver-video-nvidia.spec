@@ -11,7 +11,7 @@
 #
 %define		_nv_ver		100
 %define		_nv_rel		14.19
-%define		_rel		1
+%define		_rel		2
 #
 %define		need_x86	0
 %define		need_x8664	0
