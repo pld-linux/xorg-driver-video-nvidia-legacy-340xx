@@ -45,7 +45,7 @@ Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}.%{_nv_rel
 Source2:	%{name}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
-URL:		http://www.nvidia.com/object/linux.html
+URL:		http://www.nvidia.com/object/unix.html
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
 %endif
