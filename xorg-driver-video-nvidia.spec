@@ -11,7 +11,7 @@
 #
 %define		_nv_ver		100
 %define		_nv_rel		14.23
-%define		_rel		3
+%define		_rel		4
 #
 %define		need_x86	0
 %define		need_x8664	0
@@ -60,7 +60,6 @@ Provides:	OpenGL-GLX = 1.4
 Provides:	xorg-xserver-libglx
 %if !%{with multigl}
 Obsoletes:	Mesa
-Obsoletes:	Mesa-libGL
 %endif
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	X11-OpenGL-libGL < 1:7.0.0
@@ -68,6 +67,9 @@ Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-libGL < 1:7.0.0
 Obsoletes:	XFree86-driver-nvidia
 Obsoletes:	XFree86-nvidia
+%if !%{with multigl}
+Conflicts:	Mesa-libGL
+%endif
 Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
 ExclusiveArch:	%{ix86} %{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
