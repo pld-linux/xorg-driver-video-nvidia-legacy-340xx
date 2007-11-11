@@ -13,19 +13,18 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		nv_ver		100.14.19
 %define		rel		1
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
-Version:	%{nv_ver}
+Version:	100.14.19
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	nVidia Binary
 Group:		X11
-Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{nv_ver}/NVIDIA-Linux-x86-%{nv_ver}-pkg1.run
+Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg1.run
 # Source0-md5:	d2f89f60cef8f9a0cc0ce228b46eeb8b
-Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{nv_ver}/NVIDIA-Linux-x86_64-%{nv_ver}-pkg2.run
+Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg2.run
 # Source1-md5:	2afec320e9495444bc1582bf358e5237
 Source2:	%{pname}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
@@ -134,7 +133,7 @@ Narzędzia do zarządzania kartami graficznymi nVidia.
 Summary:	nVidia kernel module for nVidia Architecture support
 Summary(de.UTF-8):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
 Summary(pl.UTF-8):	Moduł jądra dla obsługi kart graficznych nVidia
-Version:	%{nv_ver}
+Version:	%{version}
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -155,13 +154,13 @@ sterownik nVidii dla Xorg/XFree86.
 
 %prep
 cd %{_builddir}
-rm -rf NVIDIA-Linux-x86*-%{nv_ver}-pkg*
+rm -rf NVIDIA-Linux-x86*-%{version}-pkg*
 %ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{nv_ver}-pkg1
+%setup -qDT -n NVIDIA-Linux-x86-%{version}-pkg1
 %else
 /bin/sh %{SOURCE1} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86_64-%{nv_ver}-pkg2
+%setup -qDT -n NVIDIA-Linux-x86_64-%{version}-pkg2
 %endif
 %patch0 -p1
 %patch1 -p1
