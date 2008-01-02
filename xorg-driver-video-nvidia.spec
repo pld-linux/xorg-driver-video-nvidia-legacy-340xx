@@ -297,11 +297,11 @@ fi
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA_dynamic.so.1
-%attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*.*
-%attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*.*
+%attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*
+%attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
 %endif
-%attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*.*
+%attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/wfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
