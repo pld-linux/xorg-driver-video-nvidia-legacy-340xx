@@ -285,8 +285,8 @@ fi
 %attr(755,root,root) %{_libdir}/nvidia/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
-%attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*.*
-%attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.*
 %ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %else
