@@ -2,47 +2,31 @@
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	kernel		# without kernel packages
-%bcond_without	incall		# include all tarballs
 %bcond_without	userspace	# don't build userspace programs
-%bcond_with	verbose		# verbose build (V=1)
 %bcond_with	multigl		# package libGL and libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
-#
+%bcond_with	verbose		# verbose build (V=1)
+
 %define		no_install_post_strip 1
-#
-%define		_nv_ver		169
-%define		_nv_rel		07
-#
-%define		need_x86	0
-%define		need_x8664	0
-%if %{with incall}
-%define		need_x86	1
-%define		need_x8664	1
-%else
-%ifarch %{ix86}
-%define		need_x86	1
-%endif
-%ifarch %{x8664}
-%define		need_x8664	1
-%endif
+
+%if "%{_alt_kernel}" != "%{nil}"
+%undefine	with_userspace
 %endif
 
+%define		pname		xorg-driver-video-nvidia
 %define		rel		2
+
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
-Name:		xorg-driver-video-nvidia
-Version:	%{_nv_ver}.%{_nv_rel}
+Name:		%{pname}%{_alt_kernel}
+Version:	169.07
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	nVidia Binary
 Group:		X11
-%if %{need_x86}
-Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}.%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}.%{_nv_rel}-pkg1.run
+Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg1.run
 # Source0-md5:	c4e9374dc4e7ce1a84dbfe25a800188a
-%endif
-%if %{need_x8664}
-Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}.%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}.%{_nv_rel}-pkg2.run
+Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg2.run
 # Source1-md5:	7011bafddac098c5792b7fa73e86d610
-%endif
-Source2:	%{name}-xinitrc.sh
+Source2:	%{pname}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
 URL:		http://www.nvidia.com/object/unix.html
@@ -149,7 +133,7 @@ Narzędzia do zarządzania kartami graficznymi nVidia.
 Summary:	nVidia kernel module for nVidia Architecture support
 Summary(de.UTF-8):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
 Summary(pl.UTF-8):	Moduł jądra dla obsługi kart graficznych nVidia
-Version:	%{_nv_ver}.%{_nv_rel}
+Version:	%{version}
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -170,13 +154,13 @@ sterownik nVidii dla Xorg/XFree86.
 
 %prep
 cd %{_builddir}
-rm -rf NVIDIA-Linux-x86*-%{_nv_ver}.%{_nv_rel}-pkg*
+rm -rf NVIDIA-Linux-x86*-%{version}-pkg*
 %ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}.%{_nv_rel}-pkg1
+%setup -qDT -n NVIDIA-Linux-x86-%{version}-pkg1
 %else
 /bin/sh %{SOURCE1} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}.%{_nv_rel}-pkg2
+%setup -qDT -n NVIDIA-Linux-x86_64-%{version}-pkg2
 %endif
 %patch0 -p1
 %patch1 -p1
@@ -301,8 +285,8 @@ fi
 %attr(755,root,root) %{_libdir}/nvidia/libGLcore.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
-%attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
-%attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.*
 %ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %else
