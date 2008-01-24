@@ -6,8 +6,6 @@
 %bcond_with	multigl		# package libGL and libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_with	verbose		# verbose build (V=1)
 
-%define		no_install_post_strip 1
-
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
 %endif
