@@ -16,14 +16,14 @@
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
-Version:	169.12
+Version:	173.08
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	nVidia Binary
 Group:		X11
 Source0:	http://http.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg1.run
-# Source0-md5:	c1d45a150a90e6a11da21623493a628e
+# Source0-md5:	b809290b6c4ed638a29b850be8d19e7d
 Source1:	http://http.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg2.run
-# Source1-md5:	8d29f4541f35e10ef06e566c57500cc1
+# Source1-md5:	7cc3f6319df6fa62cf1666347241c22a
 Source2:	%{pname}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
@@ -127,6 +127,7 @@ Tools for advanced control of nVidia graphic cards.
 %description progs -l pl.UTF-8
 Narzędzia do zarządzania kartami graficznymi nVidia.
 
+%if %{with kernel}
 %package -n kernel%{_alt_kernel}-video-nvidia
 Summary:	nVidia kernel module for nVidia Architecture support
 Summary(de.UTF-8):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
@@ -149,6 +150,7 @@ Die nVidia-Architektur-Unterstützung für den Linux-Kern.
 %description -n kernel%{_alt_kernel}-video-nvidia -l pl.UTF-8
 Obsługa architektury nVidia dla jądra Linuksa. Pakiet wymagany przez
 sterownik nVidii dla Xorg/XFree86.
+%endif
 
 %prep
 cd %{_builddir}
@@ -264,11 +266,13 @@ fi
 
 %postun	-p /sbin/ldconfig
 
+%if %{with kernel}
 %post	-n kernel%{_alt_kernel}-video-nvidia
 %depmod %{_kernel_ver}
 
 %postun	-n kernel%{_alt_kernel}-video-nvidia
 %depmod %{_kernel_ver}
+%endif
 
 %if %{with userspace}
 %files
