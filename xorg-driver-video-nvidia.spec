@@ -27,6 +27,7 @@ Source1:	http://http.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-
 Source2:	%{pname}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
+Patch2:		NVIDIA_kernel-169.12-2286310.diff
 URL:		http://www.nvidia.com/object/unix.html
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
@@ -164,6 +165,9 @@ rm -rf NVIDIA-Linux-x86*-%{version}-pkg*
 %endif
 %patch0 -p1
 %patch1 -p1
+%if "%{_kernel_ver}" >= "2.6.25"
+%patch2 -p0
+%endif
 echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> usr/src/nv/Makefile.kbuild
 
 %build
