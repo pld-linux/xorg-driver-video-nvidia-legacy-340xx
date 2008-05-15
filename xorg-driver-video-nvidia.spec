@@ -1,3 +1,7 @@
+# TODO
+# - solve this:
+#   error: xorg-driver-video-nvidia-169.12-3.i686 (cnfl Mesa-libGL) conflicts with installed Mesa-libGL-7.0.3-2.i686
+#   error: xorg-driver-video-nvidia-169.12-3.i686 (cnfl Mesa-libGL) conflicts with installed Mesa-libGL-7.0.3-2.i686
 #
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
@@ -45,7 +49,7 @@ Requires:	xorg-xserver-server(videodrv-abi) = 2.0
 Provides:	OpenGL = 2.1
 Provides:	OpenGL-GLX = 1.4
 Provides:	xorg-xserver-libglx
-%if !%{with multigl}
+%if %{without multigl}
 Obsoletes:	Mesa
 %endif
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
@@ -54,7 +58,7 @@ Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-libGL < 1:7.0.0
 Obsoletes:	XFree86-driver-nvidia
 Obsoletes:	XFree86-nvidia
-%if !%{with multigl}
+%if %{without multigl}
 Conflicts:	Mesa-libGL
 %endif
 Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
@@ -209,7 +213,7 @@ for f in \
 	usr/lib/libnvidia-cfg.so.%{version}		\
 	usr/lib/libGL{,core}.so.%{version}		\
 	usr/X11R6/lib/libXvMCNVIDIA.so.%{version}	\
-%if !%{with multigl}
+%if %{without multigl}
 	usr/X11R6/lib/libXvMCNVIDIA.a			\
 ; do
 	install $f $RPM_BUILD_ROOT%{_libdir}
@@ -261,10 +265,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
-cat << EOF
-NOTE: You must install:
-kernel-video-nvidia-%{version}
-for this driver to work
+cat << 'EOF'
+NOTE: You must also install kernel module for this driver to work
+  kernel-video-nvidia-%{version}
+  kernel-laptop-video-nvidia-%{version}
+  kernel-desktop-video-nvidia-%{version}
+
+Depending on which kernel brand you use.
+
 EOF
 %if %{with multigl}
 if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
