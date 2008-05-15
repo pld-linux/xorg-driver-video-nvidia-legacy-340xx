@@ -9,6 +9,10 @@
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
 %endif
+%if %{without userspace}
+# nothing to be placed to debuginfo package
+%define		_enable_debug_packages	0
+%endif
 
 %define		pname		xorg-driver-video-nvidia
 %define		rel		4
