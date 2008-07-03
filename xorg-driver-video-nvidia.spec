@@ -128,6 +128,7 @@ Summary(pl.UTF-8):	Narzędzia do zarządzania kartami graficznymi nVidia
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	XFree86-driver-nvidia-progs
+Suggests:	pkgconfig
 
 %description progs
 Tools for advanced control of nVidia graphic cards.
