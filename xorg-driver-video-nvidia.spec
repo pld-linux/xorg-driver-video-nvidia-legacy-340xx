@@ -127,8 +127,8 @@ Summary:	Tools for advanced control of nVidia graphic cards
 Summary(pl.UTF-8):	Narzędzia do zarządzania kartami graficznymi nVidia
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	XFree86-driver-nvidia-progs
 Suggests:	pkgconfig
+Obsoletes:	XFree86-driver-nvidia-progs
 
 %description progs
 Tools for advanced control of nVidia graphic cards.
@@ -136,7 +136,6 @@ Tools for advanced control of nVidia graphic cards.
 %description progs -l pl.UTF-8
 Narzędzia do zarządzania kartami graficznymi nVidia.
 
-%if %{with kernel}
 %package -n kernel%{_alt_kernel}-video-nvidia
 Summary:	nVidia kernel module for nVidia Architecture support
 Summary(de.UTF-8):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
@@ -159,7 +158,6 @@ Die nVidia-Architektur-Unterstützung für den Linux-Kern.
 %description -n kernel%{_alt_kernel}-video-nvidia -l pl.UTF-8
 Obsługa architektury nVidia dla jądra Linuksa. Pakiet wymagany przez
 sterownik nVidii dla Xorg/XFree86.
-%endif
 
 %prep
 cd %{_builddir}
@@ -279,13 +277,11 @@ fi
 
 %postun	-p /sbin/ldconfig
 
-%if %{with kernel}
 %post	-n kernel%{_alt_kernel}-video-nvidia
 %depmod %{_kernel_ver}
 
 %postun	-n kernel%{_alt_kernel}-video-nvidia
 %depmod %{_kernel_ver}
-%endif
 
 %if %{with userspace}
 %files
