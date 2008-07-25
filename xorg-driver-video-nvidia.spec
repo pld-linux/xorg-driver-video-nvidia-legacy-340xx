@@ -19,7 +19,7 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		8
+%define		rel		9
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
@@ -140,12 +140,12 @@ Narzędzia do zarządzania kartami graficznymi nVidia.
 Summary:	nVidia kernel module for nVidia Architecture support
 Summary(de.UTF-8):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
 Summary(pl.UTF-8):	Moduł jądra dla obsługi kart graficznych nVidia
-Version:	%{version}
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
 %{?with_dist_kernel:%requires_releq_kernel}
+Requires:	%{name} = %{version}-%{release}
 Provides:	X11-driver-nvidia(kernel)
 Obsoletes:	XFree86-nvidia-kernel
 
@@ -263,8 +263,9 @@ rm -rf $RPM_BUILD_ROOT
 cat << 'EOF'
 NOTE: You must also install kernel module for this driver to work
   kernel-video-nvidia-%{version}
-  kernel-laptop-video-nvidia-%{version}
   kernel-desktop-video-nvidia-%{version}
+  kernel-laptop-video-nvidia-%{version}
+  kernel-vanilla-video-nvidia-%{version}
 
 Depending on which kernel brand you use.
 
