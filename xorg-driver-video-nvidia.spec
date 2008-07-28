@@ -19,7 +19,7 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		10
+%define		rel		11
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
@@ -145,7 +145,7 @@ Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
 %{?with_dist_kernel:%requires_releq_kernel}
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{pname} = %{version}-%{release}
 Provides:	X11-driver-nvidia(kernel)
 Obsoletes:	XFree86-nvidia-kernel
 
@@ -175,7 +175,7 @@ echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> usr/s
 
 %build
 %if %{with kernel}
-cd usr/src/nv/
+cd usr/src/nv
 ln -sf Makefile.kbuild Makefile
 cat >> Makefile <<'EOF'
 
