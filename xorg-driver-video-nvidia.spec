@@ -1,3 +1,7 @@
+# TODO
+# - solve this (shouldn't there be some obsoletes?):
+#   error: xorg-driver-video-nvidia-169.12-3.i686 (cnfl Mesa-libGL) conflicts with installed Mesa-libGL-7.0.3-2.i686
+#   error: xorg-driver-video-nvidia-169.12-3.i686 (cnfl Mesa-libGL) conflicts with installed Mesa-libGL-7.0.3-2.i686
 #
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
@@ -9,6 +13,10 @@
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
 %endif
+%if %{without userspace}
+# nothing to be placed to debuginfo package
+%define		_enable_debug_packages	0
+%endif
 
 %define		pname		xorg-driver-video-nvidia
 %define		rel		1
@@ -16,14 +24,14 @@
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
-Version:	173.08
+Version:	177.13
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	nVidia Binary
 Group:		X11
-Source0:	http://http.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg1.run
-# Source0-md5:	b809290b6c4ed638a29b850be8d19e7d
-Source1:	http://http.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg2.run
-# Source1-md5:	7cc3f6319df6fa62cf1666347241c22a
+Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg1.run
+# Source0-md5:	4a752f725a0989c513d89434a465504e
+Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg2.run
+# Source1-md5:	82640e1a84da050130bed8edf994f57a
 Source2:	%{pname}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
@@ -40,7 +48,7 @@ Requires:	xorg-xserver-server(videodrv-abi) = 2.0
 Provides:	OpenGL = 2.1
 Provides:	OpenGL-GLX = 1.4
 Provides:	xorg-xserver-libglx
-%if !%{with multigl}
+%if %{without multigl}
 Obsoletes:	Mesa
 %endif
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
@@ -49,7 +57,7 @@ Obsoletes:	XFree86-OpenGL-core < 1:7.0.0
 Obsoletes:	XFree86-OpenGL-libGL < 1:7.0.0
 Obsoletes:	XFree86-driver-nvidia
 Obsoletes:	XFree86-nvidia
-%if !%{with multigl}
+%if %{without multigl}
 Conflicts:	Mesa-libGL
 %endif
 Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
@@ -119,6 +127,7 @@ Summary:	Tools for advanced control of nVidia graphic cards
 Summary(pl.UTF-8):	Narzędzia do zarządzania kartami graficznymi nVidia
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
+Suggests:	pkgconfig
 Obsoletes:	XFree86-driver-nvidia-progs
 
 %description progs
@@ -127,17 +136,16 @@ Tools for advanced control of nVidia graphic cards.
 %description progs -l pl.UTF-8
 Narzędzia do zarządzania kartami graficznymi nVidia.
 
-%if %{with kernel}
 %package -n kernel%{_alt_kernel}-video-nvidia
 Summary:	nVidia kernel module for nVidia Architecture support
 Summary(de.UTF-8):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
 Summary(pl.UTF-8):	Moduł jądra dla obsługi kart graficznych nVidia
-Version:	%{version}
 Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
 %{?with_dist_kernel:%requires_releq_kernel}
+Requires:	%{pname} = %{version}-%{rel}
 Provides:	X11-driver-nvidia(kernel)
 Obsoletes:	XFree86-nvidia-kernel
 
@@ -150,7 +158,6 @@ Die nVidia-Architektur-Unterstützung für den Linux-Kern.
 %description -n kernel%{_alt_kernel}-video-nvidia -l pl.UTF-8
 Obsługa architektury nVidia dla jądra Linuksa. Pakiet wymagany przez
 sterownik nVidii dla Xorg/XFree86.
-%endif
 
 %prep
 cd %{_builddir}
@@ -168,7 +175,7 @@ echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> usr/s
 
 %build
 %if %{with kernel}
-cd usr/src/nv/
+cd usr/src/nv
 ln -sf Makefile.kbuild Makefile
 cat >> Makefile <<'EOF'
 
@@ -201,7 +208,7 @@ for f in \
 	usr/lib/libnvidia-cfg.so.%{version}		\
 	usr/lib/libGL{,core}.so.%{version}		\
 	usr/X11R6/lib/libXvMCNVIDIA.so.%{version}	\
-%if !%{with multigl}
+%if %{without multigl}
 	usr/X11R6/lib/libXvMCNVIDIA.a			\
 ; do
 	install $f $RPM_BUILD_ROOT%{_libdir}
@@ -253,10 +260,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
-cat << EOF
-NOTE: You must install:
-kernel-video-nvidia-%{version}
-for this driver to work
+cat << 'EOF'
+NOTE: You must also install kernel module for this driver to work
+  kernel-video-nvidia-%{version}
+  kernel-desktop-video-nvidia-%{version}
+  kernel-laptop-video-nvidia-%{version}
+  kernel-vanilla-video-nvidia-%{version}
+
+Depending on which kernel brand you use.
+
 EOF
 %if %{with multigl}
 if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
@@ -266,13 +278,11 @@ fi
 
 %postun	-p /sbin/ldconfig
 
-%if %{with kernel}
 %post	-n kernel%{_alt_kernel}-video-nvidia
 %depmod %{_kernel_ver}
 
 %postun	-n kernel%{_alt_kernel}-video-nvidia
 %depmod %{_kernel_ver}
-%endif
 
 %if %{with userspace}
 %files
