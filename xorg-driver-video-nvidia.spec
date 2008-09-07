@@ -19,7 +19,7 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		6
+%define		rel		7
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
@@ -44,7 +44,8 @@ BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	xorg-xserver-server
-Requires:	xorg-xserver-server(videodrv-abi) = 2.0
+Requires:	xorg-xserver-server(videodrv-abi) >= 2.0
+Requires:	xorg-xserver-server(videodrv-abi) <= 4.1
 Provides:	OpenGL = 2.1
 Provides:	OpenGL-GLX = 1.4
 Provides:	xorg-xserver-libglx
@@ -230,7 +231,6 @@ install usr/X11R6/lib/modules/libnvidia-wfb.so.%{version} \
 install usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
 
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
-ln -sf libnvidia-wfb.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/wfb.so
 
 %if %{with multigl}
 echo %{_libdir}/nvidia >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
@@ -315,7 +315,6 @@ fi
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
 %endif
 %attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
-%attr(755,root,root) %{_libdir}/xorg/modules/wfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
 %files devel
