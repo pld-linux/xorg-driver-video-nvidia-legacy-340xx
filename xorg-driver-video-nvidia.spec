@@ -231,7 +231,6 @@ install usr/X11R6/lib/modules/libnvidia-wfb.so.%{version} \
 install usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
 
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
-ln -sf libnvidia-wfb.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/wfb.so
 
 %if %{with multigl}
 echo %{_libdir}/nvidia >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
@@ -316,7 +315,6 @@ fi
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
 %endif
 %attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
-%attr(755,root,root) %{_libdir}/xorg/modules/wfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
 %files devel
