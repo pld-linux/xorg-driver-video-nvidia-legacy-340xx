@@ -25,14 +25,14 @@ Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
-Version:	180.25
+Version:	180.27
 Release:	%{rel}%{?with_multigl:.mgl}
 License:	nVidia Binary
 Group:		X11
-Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg1.run
-# Source0-md5:	cacf85baf4cfd98213501b8751da0d20
-Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg2.run
-# Source1-md5:	712281b296e6fc93a02af7bb529552c2
+Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg0.run
+# Source0-md5:	65877da55a95ced045768f484cc54247
+Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg0.run
+# Source1-md5:	fa708bd497c704eebcd8299a37632acc
 Source2:	%{pname}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
@@ -193,10 +193,10 @@ cd %{_builddir}
 rm -rf NVIDIA-Linux-x86*-%{version}-pkg*
 %ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{version}-pkg1
+%setup -qDT -n NVIDIA-Linux-x86-%{version}-pkg0
 %else
 /bin/sh %{SOURCE1} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86_64-%{version}-pkg2
+%setup -qDT -n NVIDIA-Linux-x86_64-%{version}-pkg0
 %endif
 %patch0 -p1
 %patch1 -p1
