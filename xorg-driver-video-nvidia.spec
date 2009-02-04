@@ -27,6 +27,7 @@ Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
 Version:	180.22
 Release:	%{rel}%{?with_multigl:.mgl}
+Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg0.run
