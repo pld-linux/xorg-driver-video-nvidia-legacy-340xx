@@ -19,7 +19,7 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		1%{?with_multigl:.mgl}
+%define		rel		2%{?with_multigl:.mgl}
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -46,7 +46,7 @@ BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	xorg-xserver-server
-Requires:	xorg-xserver-server(videodrv-abi) <= 4.1
+Requires:	xorg-xserver-server(videodrv-abi) < 6.0
 Requires:	xorg-xserver-server(videodrv-abi) >= 2.0
 Provides:	OpenGL = 2.1
 Provides:	OpenGL-GLX = 1.4
