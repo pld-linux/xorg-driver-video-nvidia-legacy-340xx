@@ -112,10 +112,10 @@ Obsoletes:	XFree86-OpenGL-libGL < 1:7.0.0
 Conflicts:	Mesa-libGL
 %endif
 
-%description devel
+%description libs
 NVIDIA OpenGL (GL and GLX only) implementation libraries.
 
-%description devel -l pl.UTF-8
+%description libs -l pl.UTF-8
 Implementacja OpenGL (tylko GL i GLX) firmy NVIDIA.
 
 %package devel
