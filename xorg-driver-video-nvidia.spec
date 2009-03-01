@@ -312,7 +312,6 @@ ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/ldconfig
 cat << 'EOF'
 NOTE: You must also install kernel module for this driver to work
   kernel-video-nvidia-%{version}
@@ -329,7 +328,8 @@ if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
 fi
 %endif
 
-%postun	-p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
 
 %post	-n kernel%{_alt_kernel}-video-nvidia
 %depmod %{_kernel_ver}
