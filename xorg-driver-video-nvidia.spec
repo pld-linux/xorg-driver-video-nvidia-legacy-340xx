@@ -20,21 +20,21 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		2%{?with_multigl:.mgl}
+%define		rel		1%{?with_multigl:.mgl}
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
-Version:	185.18.14
+Version:	185.18.36
 Release:	%{rel}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg0.run
-# Source0-md5:	a91d31a9dec5deb2f9e4ca9a09e0019f
+# Source0-md5:	cf40656600b8a587e82a801f05fa2d95
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg0.run
-# Source1-md5:	534a36a15caef39118e698a871047f1a
+# Source1-md5:	c9827059697001fa61518e56fdc24e93
 Source2:	%{pname}-xinitrc.sh
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
