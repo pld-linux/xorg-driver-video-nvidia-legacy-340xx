@@ -8,11 +8,15 @@
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	kernel		# without kernel packages
 %bcond_without	userspace	# don't build userspace programs
+%bcond_with	force_userspace # force userspace build (useful if alt_kernel is set)
 %bcond_with	multigl		# package libGL and libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_with	verbose		# verbose build (V=1)
 
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
+%endif
+%if %{with force_userspace}
+%define		with_userspace 1
 %endif
 %if %{without userspace}
 # nothing to be placed to debuginfo package
@@ -25,7 +29,7 @@
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
-Name:		%{pname}%{_alt_kernel}
+Name:		%{pname}
 Version:	190.25
 Release:	%{rel}
 Epoch:		1
