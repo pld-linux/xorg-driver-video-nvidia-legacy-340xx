@@ -24,7 +24,7 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		1%{?with_multigl:.mgl}
+%define		rel		2%{?with_multigl:.mgl}
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -40,6 +40,7 @@ Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x8
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg0.run
 # Source1-md5:	9851f6068c411471907b8b0cbb0a9d17
 Source2:	%{pname}-xinitrc.sh
+Source3:	gl.pc.in
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
 URL:		http://www.nvidia.com/object/unix.html
@@ -312,6 +313,10 @@ ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
 %install_kernel_modules -m usr/src/nv/nvidia -d misc
 %endif
 
+install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
+sed -e 's|@@prefix@@|%{_prefix}|g;s|@@libdir@@|%{_libdir}|g;s|@@includedir@@|%{_includedir}|g;s|@@version@@|%{version}|g' < %{SOURCE3} \
+	> $RPM_BUILD_ROOT%{_pkgconfigdir}/gl.pc
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -404,6 +409,7 @@ fi
 %if %{with multigl}
 %attr(755,root,root) %{_libdir}/libGL.so
 %endif
+%{_pkgconfigdir}/gl.pc
 
 %files static
 %defattr(644,root,root,755)
