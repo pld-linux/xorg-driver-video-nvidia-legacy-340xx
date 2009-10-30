@@ -8,11 +8,15 @@
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	kernel		# without kernel packages
 %bcond_without	userspace	# don't build userspace programs
+%bcond_with	force_userspace # force userspace build (useful if alt_kernel is set)
 %bcond_with	multigl		# package libGL and libglx.so in a way allowing concurrent install with nvidia/fglrx drivers
 %bcond_with	verbose		# verbose build (V=1)
 
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
+%endif
+%if %{with force_userspace}
+%define		with_userspace 1
 %endif
 %if %{without userspace}
 # nothing to be placed to debuginfo package
@@ -25,17 +29,18 @@
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
-Name:		%{pname}%{_alt_kernel}
-Version:	185.18.36
+Name:		%{pname}
+Version:	190.42
 Release:	%{rel}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg0.run
-# Source0-md5:	cf40656600b8a587e82a801f05fa2d95
+# Source0-md5:	f94806feee87de756d14fe3e9bcaf05a
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg0.run
-# Source1-md5:	c9827059697001fa61518e56fdc24e93
+# Source1-md5:	ae431ff849ec01446e6724f9fcfe3bb4
 Source2:	%{pname}-xinitrc.sh
+Source3:	gl.pc.in
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
 URL:		http://www.nvidia.com/object/unix.html
@@ -48,7 +53,7 @@ BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	%{pname}-libs = %{epoch}:%{version}-%{rel}
 Requires:	xorg-xserver-server
-Requires:	xorg-xserver-server(videodrv-abi) < 6.0
+Requires:	xorg-xserver-server(videodrv-abi) <= 6.0
 Requires:	xorg-xserver-server(videodrv-abi) >= 2.0
 Provides:	xorg-xserver-module(glx)
 Obsoletes:	XFree86-driver-nvidia
@@ -308,6 +313,10 @@ ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
 %install_kernel_modules -m usr/src/nv/nvidia -d misc
 %endif
 
+install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
+sed -e 's|@@prefix@@|%{_prefix}|g;s|@@libdir@@|%{_libdir}|g;s|@@includedir@@|%{_includedir}|g;s|@@version@@|%{version}|g' < %{SOURCE3} \
+	> $RPM_BUILD_ROOT%{_pkgconfigdir}/gl.pc
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -400,6 +409,7 @@ fi
 %if %{with multigl}
 %attr(755,root,root) %{_libdir}/libGL.so
 %endif
+%{_pkgconfigdir}/gl.pc
 
 %files static
 %defattr(644,root,root,755)
