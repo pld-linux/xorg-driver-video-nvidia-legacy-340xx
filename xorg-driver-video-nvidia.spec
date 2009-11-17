@@ -332,6 +332,8 @@ EOF
 if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
 	ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 fi
+%else
+/sbin/ldconfig -N %{_libdir}/xorg/modules/extensions
 %endif
 
 %post	libs -p /sbin/ldconfig
@@ -348,12 +350,8 @@ fi
 %defattr(644,root,root,755)
 %doc LICENSE
 %doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample,html}
-%if %{with multigl}
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.*
-%ghost %{_libdir}/xorg/modules/extensions/libglx.so
-%else
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so*
-%endif
+%attr(755,root,root) %ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
@@ -370,8 +368,6 @@ fi
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libvdpau_nvidia.so.*.*
-%attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.*
-%ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %else
 %attr(755,root,root) %{_libdir}/libGL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libGL.so.1
