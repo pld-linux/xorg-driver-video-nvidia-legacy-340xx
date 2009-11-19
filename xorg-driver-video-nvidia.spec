@@ -24,7 +24,7 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		3
+%define		rel		4
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -274,7 +274,7 @@ install usr/X11R6/lib/libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
 install usr/X11R6/lib/modules/drivers/nvidia_drv.so \
-	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers
+	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so.%{version}
 install usr/X11R6/lib/modules/libnvidia-wfb.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules
 
@@ -282,6 +282,7 @@ install usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
 install usr/include/cuda/*.h $RPM_BUILD_ROOT%{_includedir}/cuda
 
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
+ln -sf nvidia_drv.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
 %if %{with multigl}
 echo %{_libdir}/nvidia >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
