@@ -354,7 +354,8 @@ fi
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.*
 %attr(755,root,root) %ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
-%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
 %files libs
 %if %{with multigl}
