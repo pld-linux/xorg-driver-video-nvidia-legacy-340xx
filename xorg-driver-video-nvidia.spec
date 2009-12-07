@@ -272,7 +272,6 @@ install usr/X11R6/lib/libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
 
 install usr/lib/libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}
 install usr/lib/vdpau/libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
-install usr/lib/vdpau/libvdpau_trace.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
 
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
@@ -287,7 +286,6 @@ install usr/include/cuda/*.h $RPM_BUILD_ROOT%{_includedir}/cuda
 ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
 ln -sf libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau/libvdpau_nvidia.so.1
-ln -sf libvdpau_trace.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau/libvdpau_trace.so.1
 
 %if %{with multigl}
 echo %{_libdir}/nvidia >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
@@ -388,9 +386,7 @@ fi
 %endif
 %attr(755,root,root) %{_libdir}/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/vdpau/libvdpau_nvidia.so.*.*
-%attr(755,root,root) %{_libdir}/vdpau/libvdpau_trace.so.*.*
 %attr(755,root,root) %{_libdir}/vdpau/libvdpau_nvidia.so.1
-%attr(755,root,root) %{_libdir}/vdpau/libvdpau_trace.so.1
 
 %files devel
 %defattr(644,root,root,755)
