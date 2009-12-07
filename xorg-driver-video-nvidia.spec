@@ -103,7 +103,7 @@ Starsze układy graficzne nie są obsługiwane przez ten pakiet:
 Summary:	OpenGL (GL and GLX) Nvidia libraries
 Summary(pl.UTF-8):	Biblioteki OpenGL (GL i GLX) Nvidia
 Group:		X11/Development/Libraries
-#Requires:	%{pname} = %{epoch}:%{version}-%{rel}
+Requires:	libvdpau >= 0.3
 Provides:	OpenGL = 2.1
 Provides:	OpenGL-GLX = 1.4
 %if %{without multigl}
