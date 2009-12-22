@@ -24,7 +24,7 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		8
+%define		rel		9
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -335,6 +335,7 @@ if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
 fi
 %else
 /sbin/ldconfig -N %{_libdir}/xorg/modules/extensions
+/sbin/ldconfig -N %{_libdir}/xorg/modules/drivers
 %endif
 
 %post	libs -p /sbin/ldconfig
@@ -351,9 +352,9 @@ fi
 %defattr(644,root,root,755)
 %doc LICENSE
 %doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample,html}
+%attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.*
 %attr(755,root,root) %ghost %{_libdir}/xorg/modules/extensions/libglx.so
-%attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
