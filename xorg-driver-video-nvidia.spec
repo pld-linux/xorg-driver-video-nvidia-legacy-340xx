@@ -24,21 +24,21 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		9
+%define		rel		1
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}
-Version:	190.42
+Version:	190.53
 Release:	%{rel}%{?with_multigl:.mgl}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg0.run
-# Source0-md5:	f94806feee87de756d14fe3e9bcaf05a
+# Source0-md5:	2e80419f6f9ac16beecd839874d0c5ab
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg0.run
-# Source1-md5:	ae431ff849ec01446e6724f9fcfe3bb4
+# Source1-md5:	3d3e956366f9df0e4c64d2e0299d1029
 Source2:	%{pname}-xinitrc.sh
 Source3:	gl.pc.in
 Patch0:		X11-driver-nvidia-GL.patch
@@ -103,7 +103,7 @@ Starsze układy graficzne nie są obsługiwane przez ten pakiet:
 Summary:	OpenGL (GL and GLX) Nvidia libraries
 Summary(pl.UTF-8):	Biblioteki OpenGL (GL i GLX) Nvidia
 Group:		X11/Development/Libraries
-#Requires:	%{pname} = %{epoch}:%{version}-%{rel}
+Requires:	libvdpau >= 0.3
 Provides:	OpenGL = 2.1
 Provides:	OpenGL-GLX = 1.4
 %if %{without multigl}
@@ -240,7 +240,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,extensions} \
-	$RPM_BUILD_ROOT{%{_includedir}/{GL,cuda},%{_libdir},%{_bindir},%{_mandir}/man1} \
+	$RPM_BUILD_ROOT{%{_includedir}/{GL,cuda},%{_libdir}/vdpau,%{_bindir},%{_mandir}/man1} \
 	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir},/etc/X11/xinit/xinitrc.d}
 %if %{with multigl}
 install -d $RPM_BUILD_ROOT{%{_libdir}/nvidia,%{_sysconfdir}/ld.so.conf.d}
@@ -257,19 +257,17 @@ for f in \
 	usr/lib/libnvidia-cfg.so.%{version}		\
 	usr/lib/libGL{,core}.so.%{version}		\
 	usr/lib/libcuda.so.%{version}			\
-	usr/lib/libvdpau_nvidia.so.%{version}	\
 	usr/X11R6/lib/libXvMCNVIDIA.so.%{version}	\
+; do
 %if %{without multigl}
-	usr/X11R6/lib/libXvMCNVIDIA.a			\
-; do
 	install $f $RPM_BUILD_ROOT%{_libdir}
-done
 %else
-; do
 	install $f $RPM_BUILD_ROOT%{_libdir}/nvidia
-done
-install usr/X11R6/lib/libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
 %endif
+done
+
+install usr/X11R6/lib/libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
+install usr/lib/vdpau/libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
 
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
@@ -283,6 +281,7 @@ install usr/include/cuda/*.h $RPM_BUILD_ROOT%{_includedir}/cuda
 
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
 ln -sf nvidia_drv.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
+ln -sf libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau/libvdpau_nvidia.so.1
 
 %if %{with multigl}
 echo %{_libdir}/nvidia >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
@@ -370,7 +369,6 @@ fi
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
-%attr(755,root,root) %{_libdir}/nvidia/libvdpau_nvidia.so.*.*
 %else
 %attr(755,root,root) %{_libdir}/libGL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libGL.so.1
@@ -383,8 +381,9 @@ fi
 %attr(755,root,root) %{_libdir}/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*
-%attr(755,root,root) %{_libdir}/libvdpau_nvidia.so.*.*
 %endif
+%attr(755,root,root) %{_libdir}/vdpau/libvdpau_nvidia.so.*.*
+%attr(755,root,root) %{_libdir}/vdpau/libvdpau_nvidia.so.1
 
 %files devel
 %defattr(644,root,root,755)
