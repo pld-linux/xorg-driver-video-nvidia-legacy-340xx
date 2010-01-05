@@ -24,7 +24,7 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		1
+%define		rel		2
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -272,7 +272,7 @@ install usr/lib/vdpau/libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vd
 install usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
 install usr/X11R6/lib/modules/drivers/nvidia_drv.so \
-	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so.%{version}
+	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
 install usr/X11R6/lib/modules/libnvidia-wfb.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules
 
@@ -280,7 +280,6 @@ install usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
 install usr/include/cuda/*.h $RPM_BUILD_ROOT%{_includedir}/cuda
 
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
-ln -sf nvidia_drv.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
 ln -sf libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau/libvdpau_nvidia.so.1
 
 %if %{with multigl}
@@ -334,7 +333,6 @@ if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
 fi
 %else
 /sbin/ldconfig -N %{_libdir}/xorg/modules/extensions
-/sbin/ldconfig -N %{_libdir}/xorg/modules/drivers
 %endif
 
 %post	libs -p /sbin/ldconfig
@@ -354,8 +352,7 @@ fi
 %attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.*
 %attr(755,root,root) %ghost %{_libdir}/xorg/modules/extensions/libglx.so
-%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/xorg/modules/drivers/nvidia_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
 %files libs
 %if %{with multigl}
