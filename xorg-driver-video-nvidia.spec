@@ -164,6 +164,14 @@ Statikus XwMCNVIDIA könyvtár.
 %description static -l pl.UTF-8
 Statyczna biblioteka XvMCNVIDIA.
 
+%package doc
+Summary:	Documentation for NVIDIA Graphics Driver
+Group:		Documentation
+
+%description doc
+NVIDIA Accelerated Linux Graphics Driver README and Installation
+Guide.
+
 %package progs
 Summary:	Tools for advanced control of nVidia graphic cards
 Summary(hu.UTF-8):	Eszközök az nVidia grafikus kártyák beállításához
@@ -423,6 +431,10 @@ ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libXvMCNVIDIA.a
+
+%files doc
+%defattr(644,root,root,755)
+%doc doc/html/*
 
 %files progs
 %defattr(644,root,root,755)
