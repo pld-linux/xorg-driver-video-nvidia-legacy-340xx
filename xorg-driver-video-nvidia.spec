@@ -392,8 +392,10 @@ ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %attr(755,root,root) %{_libdir}/nvidia/libGL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libGL.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libGLcore.so.*.*
+%attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
 %attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
+%attr(755,root,root) %{_libdir}/libcuda.so
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
@@ -404,8 +406,10 @@ ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 # (and dlopen libGL.so instead of libGL.so.1)
 %attr(755,root,root) %{_libdir}/libGL.so
 %attr(755,root,root) %{_libdir}/libGLcore.so.*.*
+%attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libXvMCNVIDIA_dynamic.so.1
+%attr(755,root,root) %{_libdir}/libcuda.so
 %attr(755,root,root) %{_libdir}/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*
@@ -415,8 +419,6 @@ ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
-%attr(755,root,root) %{_libdir}/libcuda.so
 %dir %{_includedir}/GL
 %{_includedir}/GL/gl.h
 %{_includedir}/GL/glext.h
