@@ -24,7 +24,7 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		7
+%define		rel		8
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
