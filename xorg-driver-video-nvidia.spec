@@ -24,21 +24,21 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		3
+%define		rel		1
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}
-Version:	195.36.24
+Version:	256.35
 Release:	%{rel}%{?with_multigl:.mgl}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
-Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg0.run
-# Source0-md5:	97d3e5f69707092aa643fb901bb94003
-Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg0.run
-# Source1-md5:	9d58114ed8c89cd66fbaccad0c997ee8
+Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
+# Source0-md5:	f6af8917a500de28396a438f3f548c88
+Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
+# Source1-md5:	7b5924f14a4d2326b4d916efdb7852ff
 Source2:	%{pname}-xinitrc.sh
 Source3:	gl.pc.in
 Patch0:		X11-driver-nvidia-GL.patch
@@ -219,21 +219,21 @@ sterownik nVidii dla Xorg/XFree86.
 
 %prep
 cd %{_builddir}
-rm -rf NVIDIA-Linux-x86*-%{version}-pkg*
+rm -rf NVIDIA-Linux-x86*-%{version}*
 %ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{version}-pkg0
+%setup -qDT -n NVIDIA-Linux-x86-%{version}
 %else
 /bin/sh %{SOURCE1} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86_64-%{version}-pkg0
+%setup -qDT -n NVIDIA-Linux-x86_64-%{version}-no-compat32
 %endif
 %patch0 -p1
 %patch1 -p1
-echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> usr/src/nv/Makefile.kbuild
+echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> kernel/Makefile.kbuild
 
 %build
 %if %{with kernel}
-cd usr/src/nv
+cd kernel
 ln -sf Makefile.kbuild Makefile
 cat >> Makefile <<'EOF'
 
@@ -255,18 +255,19 @@ install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,extensions} \
 install -d $RPM_BUILD_ROOT{%{_libdir}/nvidia,%{_sysconfdir}/ld.so.conf.d}
 %endif
 
-install -p usr/bin/nvidia-{settings,xconfig,bug-report.sh} $RPM_BUILD_ROOT%{_bindir}
-cp -a usr/share/man/man1/nvidia-{settings,xconfig}.* $RPM_BUILD_ROOT%{_mandir}/man1
-cp -a usr/share/applications/nvidia-settings.desktop $RPM_BUILD_ROOT%{_desktopdir}
-cp -a usr/share/pixmaps/nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
+install -p nvidia-{settings,smi,xconfig,bug-report.sh} $RPM_BUILD_ROOT%{_bindir}
+cp -a nvidia-{settings,smi,xconfig}.* $RPM_BUILD_ROOT%{_mandir}/man1
+cp -a nvidia-settings.desktop $RPM_BUILD_ROOT%{_desktopdir}
+cp -a nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/nvidia-settings.sh
 
 for f in \
-	usr/lib/tls/libnvidia-tls.so.%{version}		\
-	usr/lib/libnvidia-cfg.so.%{version}		\
-	usr/lib/libGL{,core}.so.%{version}		\
-	usr/lib/libcuda.so.%{version}			\
-	usr/X11R6/lib/libXvMCNVIDIA.so.%{version}	\
+	libGL.so.%{version}			\
+	libXvMCNVIDIA.so.%{version}		\
+	libcuda.so.%{version}			\
+	libnvidia-cfg.so.%{version}		\
+	libnvidia-glcore.so.%{version}		\
+	tls/libnvidia-tls.so.%{version}		\
 ; do
 %if %{without multigl}
 	install -p $f $RPM_BUILD_ROOT%{_libdir}
@@ -275,18 +276,18 @@ for f in \
 %endif
 done
 
-cp -a usr/X11R6/lib/libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
-install -p usr/lib/vdpau/libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
+cp -a libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
+install -p libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
 
-install -p usr/X11R6/lib/modules/extensions/libglx.so.%{version} \
+install -p libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
-install -p usr/X11R6/lib/modules/drivers/nvidia_drv.so \
+install -p nvidia_drv.so \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so.%{version}
-install -p usr/X11R6/lib/modules/libnvidia-wfb.so.%{version} \
+install -p libnvidia-wfb.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules
 
-cp -a usr/include/GL/*.h $RPM_BUILD_ROOT%{_includedir}/GL
-cp -a usr/include/cuda/*.h $RPM_BUILD_ROOT%{_includedir}/cuda
+cp -a gl*.h $RPM_BUILD_ROOT%{_includedir}/GL
+cp -a cuda*.h $RPM_BUILD_ROOT%{_includedir}/cuda
 
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
 ln -sf nvidia_drv.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
@@ -316,7 +317,7 @@ ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
 %endif
 
 %if %{with kernel}
-%install_kernel_modules -m usr/src/nv/nvidia -d misc
+%install_kernel_modules -m kernel/nvidia -d misc
 %endif
 
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
@@ -345,6 +346,7 @@ fi
 /sbin/ldconfig -N %{_libdir}/xorg/modules/extensions
 # until versioned SONAME is built for nvidia_drv.so, update symlink manually
 ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
+ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %endif
 
 %post	libs
@@ -364,8 +366,7 @@ ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %if %{with userspace}
 %files
 %defattr(644,root,root,755)
-%doc LICENSE
-%doc usr/share/doc/{README.txt,NVIDIA_Changelog,XF86Config.sample}
+%doc LICENSE NVIDIA_Changelog README.txt
 %attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.*
 %attr(755,root,root) %ghost %{_libdir}/xorg/modules/extensions/libglx.so
@@ -393,7 +394,7 @@ ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 # symlink for binary apps which fail to conform Linux OpenGL ABI
 # (and dlopen libGL.so instead of libGL.so.1)
 %attr(755,root,root) %{_libdir}/libGL.so
-%attr(755,root,root) %{_libdir}/libGLcore.so.*.*
+%attr(755,root,root) %{_libdir}/libnvidia-glcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libXvMCNVIDIA_dynamic.so.1
@@ -424,13 +425,14 @@ ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
 %files doc
 %defattr(644,root,root,755)
-%doc usr/share/doc/html/*
+%doc html/*
 
 %files progs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/nvidia-settings
-%attr(755,root,root) %{_bindir}/nvidia-xconfig
 %attr(755,root,root) %{_bindir}/nvidia-bug-report.sh
+%attr(755,root,root) %{_bindir}/nvidia-settings
+%attr(755,root,root) %{_bindir}/nvidia-smi
+%attr(755,root,root) %{_bindir}/nvidia-xconfig
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
 %{_desktopdir}/nvidia-settings.desktop
 %{_mandir}/man1/nvidia-*
