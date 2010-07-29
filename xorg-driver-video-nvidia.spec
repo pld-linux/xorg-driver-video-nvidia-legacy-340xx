@@ -386,6 +386,7 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/libcuda.so
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-glcore.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
 %else
 %attr(755,root,root) %{_libdir}/libGL.so.*.*
@@ -393,13 +394,13 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 # symlink for binary apps which fail to conform Linux OpenGL ABI
 # (and dlopen libGL.so instead of libGL.so.1)
 %attr(755,root,root) %{_libdir}/libGL.so
-%attr(755,root,root) %{_libdir}/libnvidia-glcore.so.*.*
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libXvMCNVIDIA_dynamic.so.1
 %attr(755,root,root) %{_libdir}/libcuda.so
 %attr(755,root,root) %{_libdir}/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*
+%attr(755,root,root) %{_libdir}/libnvidia-glcore.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*
 %endif
 %attr(755,root,root) %{_libdir}/vdpau/libvdpau_nvidia.so.*.*
