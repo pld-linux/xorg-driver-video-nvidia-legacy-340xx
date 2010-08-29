@@ -282,7 +282,7 @@ install -p libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
 install -p libglx.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions
 install -p nvidia_drv.so \
-	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so.%{version}
+	$RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
 install -p libnvidia-wfb.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules
 
@@ -290,7 +290,6 @@ cp -a gl*.h $RPM_BUILD_ROOT%{_includedir}/GL
 cp -a cuda*.h $RPM_BUILD_ROOT%{_includedir}/cuda
 
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
-ln -sf nvidia_drv.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
 ln -sf libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau/libvdpau_nvidia.so.1
 
 %if %{with multigl}
@@ -344,8 +343,6 @@ if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
 fi
 %else
 /sbin/ldconfig -N %{_libdir}/xorg/modules/extensions
-# until versioned SONAME is built for nvidia_drv.so, update symlink manually
-ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %endif
 
@@ -370,8 +367,7 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/xorg/modules/libnvidia-wfb.so.*.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/libglx.so.*
 %attr(755,root,root) %ghost %{_libdir}/xorg/modules/extensions/libglx.so
-%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/xorg/modules/drivers/nvidia_drv.so
+%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
 %files libs
 %defattr(644,root,root,755)
