@@ -24,25 +24,23 @@
 %endif
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		1%{?with_multigl:.mgl}
+%define		rel		0.1%{?with_multigl:.mgl}
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}
-Version:	256.53
+Version:	260.19.04
 Release:	%{rel}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
-# Source0-md5:	21fe3fe0afed7818b7adf383477b2155
+# Source0-md5:	d95ec5375a1753d60bf2dfc743fcd7ac
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
-# Source1-md5:	73f08a19e00d05165cbbfc74e2fa4bdd
+# Source1-md5:	4878be6411ba205ab772ce64101e9575
 Source2:	%{pname}-xinitrc.sh
-Source3:	gl.pc.in
-Patch0:		X11-driver-nvidia-GL.patch
-Patch1:		X11-driver-nvidia-desktop.patch
+Patch0:		X11-driver-nvidia-desktop.patch
 URL:		http://www.nvidia.com/object/unix.html
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2}
@@ -228,7 +226,6 @@ rm -rf NVIDIA-Linux-x86*-%{version}*
 %setup -qDT -n NVIDIA-Linux-x86_64-%{version}-no-compat32
 %endif
 %patch0 -p1
-%patch1 -p1
 echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> kernel/Makefile.kbuild
 
 %build
@@ -249,7 +246,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,extensions} \
-	$RPM_BUILD_ROOT{%{_includedir}/{GL,cuda},%{_libdir}/vdpau,%{_bindir},%{_mandir}/man1} \
+	$RPM_BUILD_ROOT{%{_libdir}/vdpau,%{_bindir},%{_mandir}/man1} \
 	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir},/etc/X11/xinit/xinitrc.d}
 %if %{with multigl}
 install -d $RPM_BUILD_ROOT{%{_libdir}/nvidia,%{_sysconfdir}/ld.so.conf.d}
@@ -286,9 +283,6 @@ install -p nvidia_drv.so \
 install -p libnvidia-wfb.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules
 
-cp -a gl*.h $RPM_BUILD_ROOT%{_includedir}/GL
-cp -a cuda*.h $RPM_BUILD_ROOT%{_includedir}/cuda
-
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
 ln -sf nvidia_drv.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
 ln -sf libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau/libvdpau_nvidia.so.1
@@ -319,10 +313,6 @@ ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
 %if %{with kernel}
 %install_kernel_modules -m kernel/nvidia -d misc
 %endif
-
-install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
-sed -e 's|@@prefix@@|%{_prefix}|g;s|@@libdir@@|%{_libdir}|g;s|@@includedir@@|%{_includedir}|g;s|@@version@@|%{version}|g' < %{SOURCE3} \
-	> $RPM_BUILD_ROOT%{_pkgconfigdir}/gl.pc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -408,16 +398,9 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 
 %files devel
 %defattr(644,root,root,755)
-%dir %{_includedir}/GL
-%{_includedir}/GL/gl.h
-%{_includedir}/GL/glext.h
-%{_includedir}/GL/glx.h
-%{_includedir}/GL/glxext.h
-%{_includedir}/cuda
 %if %{with multigl}
 %attr(755,root,root) %{_libdir}/libGL.so
 %endif
-%{_pkgconfigdir}/gl.pc
 
 %files static
 %defattr(644,root,root,755)
