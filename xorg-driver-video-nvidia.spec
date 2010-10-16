@@ -30,15 +30,15 @@ Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}
-Version:	260.19.06
+Version:	260.19.12
 Release:	%{rel}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
-# Source0-md5:	845154d89f9c56bbfcd9554213053bed
+# Source0-md5:	8bcefb2423908160d3676200650ad5c9
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
-# Source1-md5:	69f00bf3f8f381a6a870d9ad341e3a2e
+# Source1-md5:	111da94be1ea21c0531b6e1c45d01b9b
 Source2:	%{pname}-xinitrc.sh
 Patch0:		X11-driver-nvidia-desktop.patch
 URL:		http://www.nvidia.com/object/unix.html
