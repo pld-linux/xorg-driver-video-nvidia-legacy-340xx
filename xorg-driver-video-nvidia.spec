@@ -331,11 +331,6 @@ rm -rf $RPM_BUILD_ROOT
 cat << 'EOF'
 NOTE: You must also install kernel module for this driver to work
   kernel-video-nvidia-%{version}
-  kernel-desktop-video-nvidia-%{version}
-  kernel-laptop-video-nvidia-%{version}
-  kernel-vanilla-video-nvidia-%{version}
-
-Depending on which kernel brand you use.
 
 EOF
 %if %{with multigl}
