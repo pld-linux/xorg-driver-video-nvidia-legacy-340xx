@@ -31,15 +31,15 @@ Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}
-Version:	260.19.36
+Version:	270.18
 Release:	%{rel}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
-# Source0-md5:	2826484d87827351774449382e45c4a9
+# Source0-md5:	248a26d0730183982d4772a66787f242
 Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
-# Source1-md5:	6ebc5db9066e920b0b0e48377ce5eeb5
+# Source1-md5:	b84e393bb1bbd9687a44a914346e58df
 Source2:	%{pname}-xinitrc.sh
 Source3:	gl.pc.in
 Patch0:		X11-driver-nvidia-GL.patch
@@ -269,6 +269,7 @@ for f in \
 	libcuda.so.%{version}			\
 	libnvidia-cfg.so.%{version}		\
 	libnvidia-glcore.so.%{version}		\
+	libnvidia-ml.so.%{version}		\
 	tls/libnvidia-tls.so.%{version}		\
 ; do
 %if %{without multigl}
@@ -392,6 +393,7 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-glcore.so.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-ml.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
 %else
 %attr(755,root,root) %{_libdir}/libGL.so.*.*
@@ -409,6 +411,7 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-glcore.so.*.*
+%attr(755,root,root) %{_libdir}/libnvidia-ml.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*
 %endif
 %attr(755,root,root) %{_libdir}/vdpau/libvdpau_nvidia.so.*.*
