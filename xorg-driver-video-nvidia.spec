@@ -25,7 +25,7 @@
 %define		no_install_post_check_so 1
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		8%{?with_multigl:.mgl}
+%define		rel		9%{?with_multigl:.mgl}
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -278,6 +278,8 @@ for f in \
 %endif
 done
 
+/sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
+
 cp -a libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}
 install -p libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
 
@@ -288,7 +290,7 @@ install -p nvidia_drv.so \
 install -p libnvidia-wfb.so.%{version} \
 	$RPM_BUILD_ROOT%{_libdir}/xorg/modules
 
-cp -a gl*.h $RPM_BUILD_ROOT%{_includedir}/GL
+cp -p gl*.h $RPM_BUILD_ROOT%{_includedir}/GL
 
 ln -sf libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/libglx.so
 ln -sf nvidia_drv.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
@@ -304,10 +306,11 @@ ln -sf nvidia/libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/libGL.so
 ln -sf libOpenCL.so.1.0.0 $RPM_BUILD_ROOT%{_libdir}/nvidia/libOpenCL.so.1
 ln -sf nvidia/libOpenCL.so.1 $RPM_BUILD_ROOT%{_libdir}/libOpenCL.so
 
-ln -sf nvidia/libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
 ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
+ln -sf nvidia/libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
 
 ln -sf nvidia/libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
+ln -sf nvidia/libcuda.so.1 $RPM_BUILD_ROOT%{_libdir}/libcuda.so.%{version}
 %else
 # OpenGL ABI for Linux compatibility
 ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libGL.so.1
@@ -316,10 +319,11 @@ ln -sf libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/libGL.so
 ln -sf libOpenCL.so.1.0.0 $RPM_BUILD_ROOT%{_libdir}/libOpenCL.so.1
 ln -sf libOpenCL.so.1 $RPM_BUILD_ROOT%{_libdir}/libOpenCL.so
 
-ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
 ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA_dynamic.so.1
+ln -sf libXvMCNVIDIA_dynamic.so.1 $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
 
-ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
+ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so.1
+ln -sf libcuda.so.1 $RPM_BUILD_ROOT%{_libdir}/libcuda.so
 %endif
 %endif
 
@@ -328,7 +332,11 @@ ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
 %endif
 
 install -d $RPM_BUILD_ROOT%{_pkgconfigdir}
-sed -e 's|@@prefix@@|%{_prefix}|g;s|@@libdir@@|%{_libdir}|g;s|@@includedir@@|%{_includedir}|g;s|@@version@@|%{version}|g' < %{SOURCE3} \
+sed -e '
+	s|@@prefix@@|%{_prefix}|g;
+	s|@@libdir@@|%{_libdir}|g;
+	s|@@includedir@@|%{_includedir}|g;
+	s|@@version@@|%{version}|g' < %{SOURCE3} \
 	> $RPM_BUILD_ROOT%{_pkgconfigdir}/gl.pc
 
 %clean
@@ -389,6 +397,7 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
 %attr(755,root,root) %{_libdir}/libcuda.so
+%attr(755,root,root) %ghost %{_libdir}/libcuda.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-glcore.so.*.*
@@ -406,8 +415,10 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libXvMCNVIDIA_dynamic.so.1
 %attr(755,root,root) %{_libdir}/libcuda.so
+%attr(755,root,root) %ghost %{_libdir}/libcuda.so.1
 %attr(755,root,root) %{_libdir}/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnvidia-cfg.so.1
 %attr(755,root,root) %{_libdir}/libnvidia-glcore.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*
 %endif
