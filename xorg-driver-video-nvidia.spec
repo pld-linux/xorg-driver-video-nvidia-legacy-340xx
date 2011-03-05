@@ -25,21 +25,21 @@
 %define		no_install_post_check_so 1
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		9%{?with_multigl:.mgl}
+%define		rel		1%{?with_multigl:.mgl}
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}
-Version:	260.19.36
+Version:	270.30
 Release:	%{rel}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
-Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
-# Source0-md5:	2826484d87827351774449382e45c4a9
-Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
-# Source1-md5:	6ebc5db9066e920b0b0e48377ce5eeb5
+Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
+# Source0-md5:	ff319212b9ac52d645df31027c31ee45
+Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
+# Source1-md5:	2fa08295aa0d0ea21646bdc9630c5116
 Source2:	%{pname}-xinitrc.sh
 Source3:	gl.pc.in
 Patch0:		X11-driver-nvidia-GL.patch
@@ -54,7 +54,7 @@ BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	%{pname}-libs = %{epoch}:%{version}-%{rel}
 Requires:	xorg-xserver-server
-Requires:	xorg-xserver-server(videodrv-abi) <= 8.0
+Requires:	xorg-xserver-server(videodrv-abi) <= 10.0
 Requires:	xorg-xserver-server(videodrv-abi) >= 2.0
 Provides:	xorg-xserver-module(glx)
 Obsoletes:	XFree86-driver-nvidia
