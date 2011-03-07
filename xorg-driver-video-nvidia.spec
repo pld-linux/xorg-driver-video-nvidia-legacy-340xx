@@ -25,7 +25,7 @@
 %define		no_install_post_check_so 1
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		1%{?with_multigl:.mgl}
+%define		rel		2%{?with_multigl:.mgl}
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -269,6 +269,7 @@ for f in \
 	libcuda.so.%{version}			\
 	libnvidia-cfg.so.%{version}		\
 	libnvidia-glcore.so.%{version}		\
+	libnvidia-ml.so.%{version}		\
 	tls/libnvidia-tls.so.%{version}		\
 ; do
 %if %{without multigl}
@@ -401,6 +402,8 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-glcore.so.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-ml.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnvidia-ml.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
 %else
 %attr(755,root,root) %{_libdir}/libGL.so.*.*
@@ -420,6 +423,8 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnvidia-cfg.so.1
 %attr(755,root,root) %{_libdir}/libnvidia-glcore.so.*.*
+%attr(755,root,root) %{_libdir}/libnvidia-ml.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnvidia-ml.so.1
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*
 %endif
 %attr(755,root,root) %{_libdir}/vdpau/libvdpau_nvidia.so.*.*
