@@ -25,7 +25,7 @@
 %define		no_install_post_check_so 1
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		5%{?with_multigl:.mgl}
+%define		rel		6%{?with_multigl:.mgl}
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -251,7 +251,9 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with userspace}
 install -d $RPM_BUILD_ROOT%{_libdir}/xorg/modules/{drivers,extensions} \
 	$RPM_BUILD_ROOT{%{_includedir}/GL,%{_libdir}/vdpau,%{_bindir},%{_mandir}/man1} \
-	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir},/etc/X11/xinit/xinitrc.d}
+	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir},/etc/X11/xinit/xinitrc.d} \
+	$RPM_BUILD_ROOT/etc/OpenCL/vendors
+
 %if %{with multigl}
 install -d $RPM_BUILD_ROOT{%{_libdir}/nvidia,%{_sysconfdir}/ld.so.conf.d}
 %endif
@@ -261,6 +263,7 @@ cp -a nvidia-{settings,smi,xconfig}.* $RPM_BUILD_ROOT%{_mandir}/man1
 cp -a nvidia-settings.desktop $RPM_BUILD_ROOT%{_desktopdir}
 cp -a nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/nvidia-settings.sh
+install -p nvidia.icd $RPM_BUILD_ROOT/etc/OpenCL/vendors
 
 for f in \
 	libGL.so.%{version}			\
@@ -386,6 +389,9 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 
 %files libs
 %defattr(644,root,root,755)
+%dir /etc/OpenCL
+%dir /etc/OpenCL/vendors
+/etc/OpenCL/vendors/nvidia.icd
 %if %{with multigl}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ld.so.conf.d/nvidia.conf
 %dir %{_libdir}/nvidia
