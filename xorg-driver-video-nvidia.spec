@@ -323,6 +323,9 @@ ln -sf libXvMCNVIDIA_dynamic.so.1 $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
 
 ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so.1
 ln -sf libcuda.so.1 $RPM_BUILD_ROOT%{_libdir}/libcuda.so
+
+ln -sf libnvcuvid.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libnvcuvid.so.1
+ln -sf libnvcuvid.so.1 $RPM_BUILD_ROOT%{_libdir}/libnvcuvid.so
 %endif
 
 %if %{with kernel}
@@ -407,8 +410,12 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/libcuda.so
 %attr(755,root,root) %ghost %{_libdir}/libcuda.so.1
 %attr(755,root,root) %{_libdir}/libcuda.so.*.*
+%attr(755,root,root) %{_libdir}/libnvcuvid.so
+%attr(755,root,root) %ghost %{_libdir}/libnvcuvid.so.1
+%attr(755,root,root) %{_libdir}/libnvcuvid.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-cfg.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnvidia-cfg.so.1
+%attr(755,root,root) %{_libdir}/libnvidia-compiler.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-glcore.so.*.*
 %attr(755,root,root) %{_libdir}/libnvidia-ml.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnvidia-ml.so.1
