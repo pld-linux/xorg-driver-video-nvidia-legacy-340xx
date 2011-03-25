@@ -25,7 +25,7 @@
 %define		no_install_post_check_so 1
 
 %define		pname		xorg-driver-video-nvidia
-%define		rel		6%{?with_multigl:.mgl}
+%define		rel		7%{?with_multigl:.mgl}
 
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -265,21 +265,24 @@ cp -a nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/nvidia-settings.sh
 install -p nvidia.icd $RPM_BUILD_ROOT/etc/OpenCL/vendors
 
+%if %{without multigl}
+install -p libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}
+%else
+install -p libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/nvidia
+%endif
+
 for f in \
-	libGL.so.%{version}			\
 	libOpenCL.so.1.0.0			\
 	libXvMCNVIDIA.so.%{version}		\
 	libcuda.so.%{version}			\
+	libnvcuvid.so.%{version}		\
 	libnvidia-cfg.so.%{version}		\
+	libnvidia-compiler.so.%{version}	\
 	libnvidia-glcore.so.%{version}		\
 	libnvidia-ml.so.%{version}		\
 	tls/libnvidia-tls.so.%{version}		\
 ; do
-%if %{without multigl}
 	install -p $f $RPM_BUILD_ROOT%{_libdir}
-%else
-	install -p $f $RPM_BUILD_ROOT%{_libdir}/nvidia
-%endif
 done
 
 /sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
@@ -306,19 +309,11 @@ echo %{_libdir}/nvidia >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
 # OpenGL ABI for Linux compatibility
 ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/nvidia/libGL.so.1
 ln -sf nvidia/libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/libGL.so
-
-ln -sf libOpenCL.so.1.0.0 $RPM_BUILD_ROOT%{_libdir}/nvidia/libOpenCL.so.1
-ln -sf nvidia/libOpenCL.so.1 $RPM_BUILD_ROOT%{_libdir}/libOpenCL.so
-
-ln -sf libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
-ln -sf nvidia/libXvMCNVIDIA.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
-
-ln -sf nvidia/libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so
-ln -sf nvidia/libcuda.so.1 $RPM_BUILD_ROOT%{_libdir}/libcuda.so.%{version}
 %else
 # OpenGL ABI for Linux compatibility
 ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libGL.so.1
 ln -sf libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/libGL.so
+%endif
 
 ln -sf libOpenCL.so.1.0.0 $RPM_BUILD_ROOT%{_libdir}/libOpenCL.so.1
 ln -sf libOpenCL.so.1 $RPM_BUILD_ROOT%{_libdir}/libOpenCL.so
@@ -328,7 +323,6 @@ ln -sf libXvMCNVIDIA_dynamic.so.1 $RPM_BUILD_ROOT%{_libdir}/libXvMCNVIDIA.so
 
 ln -sf libcuda.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libcuda.so.1
 ln -sf libcuda.so.1 $RPM_BUILD_ROOT%{_libdir}/libcuda.so
-%endif
 %endif
 
 %if %{with kernel}
@@ -397,26 +391,13 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %dir %{_libdir}/nvidia
 %attr(755,root,root) %{_libdir}/nvidia/libGL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libGL.so.1
-%attr(755,root,root) %{_libdir}/libOpenCL.so
-%attr(755,root,root) %{_libdir}/nvidia/libOpenCL.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/nvidia/libOpenCL.so.1
-%attr(755,root,root) %{_libdir}/libXvMCNVIDIA.so
-%attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
-%attr(755,root,root) %{_libdir}/libcuda.so
-%attr(755,root,root) %ghost %{_libdir}/libcuda.so.1
-%attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
-%attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
-%attr(755,root,root) %{_libdir}/nvidia/libnvidia-glcore.so.*.*
-%attr(755,root,root) %{_libdir}/nvidia/libnvidia-ml.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnvidia-ml.so.1
-%attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
 %else
 %attr(755,root,root) %{_libdir}/libGL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libGL.so.1
 # symlink for binary apps which fail to conform Linux OpenGL ABI
 # (and dlopen libGL.so instead of libGL.so.1)
 %attr(755,root,root) %{_libdir}/libGL.so
+%endif
 %attr(755,root,root) %{_libdir}/libOpenCL.so
 %attr(755,root,root) %{_libdir}/libOpenCL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libOpenCL.so.1
@@ -432,7 +413,6 @@ ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %attr(755,root,root) %{_libdir}/libnvidia-ml.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnvidia-ml.so.1
 %attr(755,root,root) %{_libdir}/libnvidia-tls.so.*.*
-%endif
 %attr(755,root,root) %{_libdir}/vdpau/libvdpau_nvidia.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/vdpau/libvdpau_nvidia.so.1
 
