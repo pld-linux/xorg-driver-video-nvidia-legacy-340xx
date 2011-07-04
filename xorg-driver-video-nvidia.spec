@@ -349,14 +349,15 @@ NOTE: You must also install kernel module for this driver to work
   kernel-video-nvidia-%{version}
 
 EOF
+# until versioned SONAME is built for nvidia_drv.so, update symlink manually
+ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %if %{with multigl}
 if [ ! -e %{_libdir}/xorg/modules/extensions/libglx.so ]; then
+	/sbin/ldconfig -N %{_libdir}/xorg/modules/extensions
 	ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 fi
 %else
 /sbin/ldconfig -N %{_libdir}/xorg/modules/extensions
-# until versioned SONAME is built for nvidia_drv.so, update symlink manually
-ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 ln -sf libglx.so.%{version} %{_libdir}/xorg/modules/extensions/libglx.so
 %endif
 
