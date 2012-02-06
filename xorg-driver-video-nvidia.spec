@@ -26,7 +26,7 @@ Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}
 Version:	290.10
-Release:	7
+Release:	8
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
@@ -325,8 +325,6 @@ NOTE: You must also install kernel module for this driver to work
   kernel-video-nvidia-%{version}
 
 EOF
-# until versioned SONAME is built for nvidia_drv.so, update symlink manually
-ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 
 %post libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
