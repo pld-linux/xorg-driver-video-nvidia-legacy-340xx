@@ -26,7 +26,7 @@ Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}
 Version:	290.10
-Release:	6
+Release:	7
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
@@ -287,8 +287,13 @@ cp -p gl*.h $RPM_BUILD_ROOT%{_includedir}/GL
 
 ln -sf libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau/libvdpau_nvidia.so.1
 
+%ifarch %{x8664}
+echo %{_libdir}/nvidia >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia64.conf
+echo %{_libdir}/vdpau >>$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia64.conf
+%else
 echo %{_libdir}/nvidia >$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
 echo %{_libdir}/vdpau >>$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
+%endif
 
 # OpenGL ABI for Linux compatibility
 ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/nvidia/libGL.so.1
@@ -350,7 +355,7 @@ ln -sf nvidia_drv.so.%{version} %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %dir %{_sysconfdir}/OpenCL
 %dir %{_sysconfdir}/OpenCL/vendors
 %{_sysconfdir}/OpenCL/vendors/nvidia.icd
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ld.so.conf.d/nvidia.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ld.so.conf.d/nvidia*.conf
 %dir %{_libdir}/nvidia
 %attr(755,root,root) %{_libdir}/nvidia/libGL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libGL.so.1
