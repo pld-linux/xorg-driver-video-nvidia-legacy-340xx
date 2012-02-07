@@ -20,13 +20,14 @@
 %endif
 %define		no_install_post_check_so 1
 
+%define		rel	8
 %define		pname	xorg-driver-video-nvidia
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}
 Version:	290.10
-Release:	8
+Release:	%{rel}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
@@ -59,6 +60,9 @@ Obsoletes:	XFree86-nvidia
 Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
 ExclusiveArch:	%{ix86} %{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# constify %rel macro, so it wouldn't expand in kernel subpkgs
+%{expand:%%global rel %{release}}
 
 %define		_noautoreqdep	libGL.so.1
 
