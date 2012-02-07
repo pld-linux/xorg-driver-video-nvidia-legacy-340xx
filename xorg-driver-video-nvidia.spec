@@ -20,7 +20,7 @@
 %endif
 %define		no_install_post_check_so 1
 
-%define		rel 10
+%define		rel 11
 %define		pname	xorg-driver-video-nvidia
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -342,10 +342,10 @@ EOF
 %doc LICENSE NVIDIA_Changelog README.txt
 %dir %{_libdir}/xorg/modules/extensions/nvidia
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libnvidia-wfb.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/xorg/modules/extensions/nvidia/libnvidia-wfb.so.1
-%attr(755,root,root) %ghost %{_libdir}/xorg/modules/extensions/nvidia/libnvidia-wfb.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libnvidia-wfb.so.1
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libnvidia-wfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libglx.so.*
-%attr(755,root,root) %ghost %{_libdir}/xorg/modules/extensions/nvidia/libglx.so
+%attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libglx.so
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %{_sysconfdir}/X11/xorg.conf.d/10-nvidia.conf
 %{_sysconfdir}/X11/xorg.conf.d/10-nvidia-modules.conf
