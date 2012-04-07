@@ -20,12 +20,12 @@
 %endif
 %define		no_install_post_check_so 1
 
-%define		rel 4
+%define		rel 5
 %define		pname	xorg-driver-video-nvidia
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
-Name:		%{pname}
+Name:		%{pname}%{_alt_kernel}
 Version:	295.33
 Release:	%{rel}
 Epoch:		1
@@ -59,7 +59,7 @@ Obsoletes:	XFree86-driver-nvidia
 Obsoletes:	XFree86-nvidia
 Conflicts:	XFree86-OpenGL-devel <= 4.2.0-3
 ExclusiveArch:	%{ix86} %{x8664}
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+BuildRoot:	%{tmpdir}/%{pname}-%{version}-root-%(id -u -n)
 
 %define		_noautoreqdep	libGL.so.1
 
