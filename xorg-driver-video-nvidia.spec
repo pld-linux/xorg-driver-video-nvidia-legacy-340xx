@@ -170,7 +170,7 @@ Summary:	Tools for advanced control of nVidia graphic cards
 Summary(hu.UTF-8):	Eszközök az nVidia grafikus kártyák beállításához
 Summary(pl.UTF-8):	Narzędzia do zarządzania kartami graficznymi nVidia
 Group:		Applications/System
-Requires:	%{pname} = %{epoch}:%{version}-%{rel}
+Requires:	%{pname} = %{epoch}:%{version}
 Suggests:	pkgconfig
 Obsoletes:	XFree86-driver-nvidia-progs
 
@@ -193,7 +193,7 @@ Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
 %{?with_dist_kernel:%requires_releq_kernel}
-Requires:	%{pname} = %{epoch}:%{version}-%{rel}
+Requires:	%{pname} = %{epoch}:%{version}
 Provides:	X11-driver-nvidia(kernel)
 Obsoletes:	XFree86-nvidia-kernel
 
