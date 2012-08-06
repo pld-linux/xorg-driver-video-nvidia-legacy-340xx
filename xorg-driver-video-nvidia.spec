@@ -20,21 +20,21 @@
 %endif
 %define		no_install_post_check_so 1
 
-%define		rel 4
+%define		rel 1
 %define		pname	xorg-driver-video-nvidia
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
-Version:	295.53
+Version:	295.71
 Release:	%{rel}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
-# Source0-md5:	af353274ab078cb90aba428ca1f00f0e
+# Source0-md5:	80731d9e51aa52117330b791d5417624
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
-# Source1-md5:	c974ee20fc016c9fa9ef39fc2e298f8a
+# Source1-md5:	820a6fc65e0eecf8e6f3ae7a0b96fc4f
 Source2:	%{pname}-xinitrc.sh
 Source3:	gl.pc.in
 Source4:	10-nvidia.conf
@@ -277,8 +277,7 @@ install -p libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
 
 install -p libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/nvidia
 ln -s libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/nvidia/libglx.so
-install -p nvidia_drv.so $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so.%{version}
-ln -s nvidia_drv.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
+install -p nvidia_drv.so $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers
 install -p libnvidia-wfb.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/nvidia
 ln -s libnvidia-wfb.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/nvidia/libnvidia-wfb.so
 
@@ -347,7 +346,6 @@ EOF
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libnvidia-wfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libglx.so.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libglx.so
-%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so.*
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %{_sysconfdir}/X11/xorg.conf.d/10-nvidia.conf
 %{_sysconfdir}/X11/xorg.conf.d/10-nvidia-modules.conf
