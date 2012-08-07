@@ -277,7 +277,8 @@ install -p libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
 
 install -p libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/nvidia
 ln -s libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/nvidia/libglx.so
-install -p nvidia_drv.so $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers
+install -p nvidia_drv.so $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so.%{version}
+ln -s nvidia_drv.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/drivers/nvidia_drv.so
 install -p libnvidia-wfb.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/nvidia
 ln -s libnvidia-wfb.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/nvidia/libnvidia-wfb.so
 
@@ -346,6 +347,7 @@ EOF
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libnvidia-wfb.so
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libglx.so.*
 %attr(755,root,root) %{_libdir}/xorg/modules/extensions/nvidia/libglx.so
+%attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so.*
 %attr(755,root,root) %{_libdir}/xorg/modules/drivers/nvidia_drv.so
 %{_sysconfdir}/X11/xorg.conf.d/10-nvidia.conf
 %{_sysconfdir}/X11/xorg.conf.d/10-nvidia-modules.conf
