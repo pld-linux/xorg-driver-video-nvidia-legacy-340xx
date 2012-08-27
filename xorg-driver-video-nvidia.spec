@@ -20,21 +20,21 @@
 %endif
 %define		no_install_post_check_so 1
 
-%define		rel 6
+%define		rel 1
 %define		pname	xorg-driver-video-nvidia
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
-Version:	302.17
+Version:	304.43
 Release:	%{rel}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
-# Source0-md5:	b7f908ea08218df08db06026215ec419
+# Source0-md5:	393260b7e8d8195e982eb718f5014c3d
 Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
-# Source1-md5:	7e768412a16853078b04037a7cc9c8ac
+# Source1-md5:	e634de31c96f7b418ed7fdc385ab049d
 Source2:	%{pname}-xinitrc.sh
 Source3:	gl.pc.in
 Source4:	10-nvidia.conf
@@ -51,7 +51,7 @@ BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	%{pname}-libs = %{epoch}:%{version}-%{rel}
 Requires:	xorg-xserver-server
-Requires:	xorg-xserver-server(videodrv-abi) <= 12.0
+Requires:	xorg-xserver-server(videodrv-abi) <= 13.0
 Requires:	xorg-xserver-server(videodrv-abi) >= 2.0
 Provides:	xorg-driver-video
 Provides:	xorg-xserver-module(glx)
