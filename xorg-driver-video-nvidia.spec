@@ -20,7 +20,7 @@
 %endif
 %define		no_install_post_check_so 1
 
-%define		rel 1
+%define		rel 2
 %define		pname	xorg-driver-video-nvidia
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -141,22 +141,6 @@ OpenGL fejléc fájlok (csak GL és GLX) NVIDIA OpenGL implementációhoz.
 Pliki nagłówkowe OpenGL (tylko GL i GLX) dla implementacji OpenGL
 firmy NVIDIA.
 
-%package static
-Summary:	Static XvMCNVIDIA library
-Summary(hu.UTF-8):	Statikus XwMCNVIDIA könyvtár
-Summary(pl.UTF-8):	Statyczna biblioteka XvMCNVIDIA
-Group:		X11/Development/Libraries
-Requires:	%{pname}-devel = %{epoch}:%{version}-%{rel}
-
-%description static
-Static XvMCNVIDIA library.
-
-%description static -l hu.UTF-8
-Statikus XwMCNVIDIA könyvtár.
-
-%description static -l pl.UTF-8
-Statyczna biblioteka XvMCNVIDIA.
-
 %package doc
 Summary:	Documentation for NVIDIA Graphics Driver
 Group:		Documentation
@@ -247,7 +231,8 @@ install -d $RPM_BUILD_ROOT%{_libdir}/{nvidia,xorg/modules/{drivers,extensions/nv
 	$RPM_BUILD_ROOT%{_sysconfdir}/{OpenCL/vendors,ld.so.conf.d,X11/xorg.conf.d}
 
 install -p nvidia-{settings,smi,xconfig,bug-report.sh} $RPM_BUILD_ROOT%{_bindir}
-cp -p nvidia-{settings,smi,xconfig}.* $RPM_BUILD_ROOT%{_mandir}/man1
+install -p nvidia-cuda-proxy-{control,server} $RPM_BUILD_ROOT%{_bindir}
+cp -p nvidia-{settings,smi,xconfig,cuda-proxy-control}.* $RPM_BUILD_ROOT%{_mandir}/man1
 cp -p nvidia-settings.desktop $RPM_BUILD_ROOT%{_desktopdir}
 cp -p nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/nvidia-settings.sh
@@ -260,19 +245,19 @@ sed -i -e 's|@@LIBDIR@@|%{_libdir}|g' $RPM_BUILD_ROOT/etc/X11/xorg.conf.d/10-nvi
 for f in \
 	libGL.so.%{version}			\
 	libOpenCL.so.1.0.0			\
-	libXvMCNVIDIA.so.%{version}		\
 	libcuda.so.%{version}			\
 	libnvcuvid.so.%{version}		\
 	libnvidia-cfg.so.%{version}		\
 	libnvidia-compiler.so.%{version}	\
+	libnvidia-encode.so.%{version}	\
 	libnvidia-glcore.so.%{version}		\
 	libnvidia-ml.so.%{version}		\
+	libnvidia-opencl.so.%{version}		\
 	tls/libnvidia-tls.so.%{version}		\
 ; do
 	install -p $f $RPM_BUILD_ROOT%{_libdir}/nvidia
 done
 
-cp -a libXvMCNVIDIA.a $RPM_BUILD_ROOT%{_libdir}/nvidia
 install -p libvdpau_nvidia.so.%{version} $RPM_BUILD_ROOT%{_libdir}/vdpau
 
 install -p libglx.so.%{version} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/extensions/nvidia
@@ -301,7 +286,6 @@ echo %{_libdir}/vdpau >>$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
 ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/nvidia/libGL.so.1
 ln -sf libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/nvidia/libGL.so
 ln -sf libOpenCL.so.1 $RPM_BUILD_ROOT%{_libdir}/nvidia/libOpenCL.so
-ln -sf libXvMCNVIDIA_dynamic.so.1 $RPM_BUILD_ROOT%{_libdir}/nvidia/libXvMCNVIDIA.so
 ln -sf libcuda.so.1 $RPM_BUILD_ROOT%{_libdir}/nvidia/libcuda.so
 ln -sf libnvcuvid.so.1 $RPM_BUILD_ROOT%{_libdir}/nvidia/libnvcuvid.so
 %endif
@@ -364,9 +348,6 @@ EOF
 %attr(755,root,root) %{_libdir}/nvidia/libOpenCL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libOpenCL.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libOpenCL.so
-%attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA.so.*.*
-%attr(755,root,root) %{_libdir}/nvidia/libXvMCNVIDIA.so
-%attr(755,root,root) %ghost %{_libdir}/nvidia/libXvMCNVIDIA_dynamic.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libcuda.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so
@@ -376,9 +357,13 @@ EOF
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-cfg.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libnvidia-cfg.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-compiler.so.*.*
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-encode.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/nvidia/libnvidia-encode.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-glcore.so.*.*
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-ml.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libnvidia-ml.so.1
+%attr(755,root,root) %{_libdir}/nvidia/libnvidia-opencl.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/nvidia/libnvidia-opencl.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libnvidia-tls.so.*.*
 %attr(755,root,root) %{_libdir}/vdpau/libvdpau_nvidia.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/vdpau/libvdpau_nvidia.so.1
@@ -393,10 +378,6 @@ EOF
 %attr(755,root,root) %{_libdir}/nvidia/libGL.so
 %{_pkgconfigdir}/gl.pc
 
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/nvidia/libXvMCNVIDIA.a
-
 %files doc
 %defattr(644,root,root,755)
 %doc html/*
@@ -404,6 +385,8 @@ EOF
 %files progs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/nvidia-bug-report.sh
+%attr(755,root,root) %{_bindir}/nvidia-cuda-proxy-control
+%attr(755,root,root) %{_bindir}/nvidia-cuda-proxy-server
 %attr(755,root,root) %{_bindir}/nvidia-settings
 %attr(755,root,root) %{_bindir}/nvidia-smi
 %attr(755,root,root) %{_bindir}/nvidia-xconfig
