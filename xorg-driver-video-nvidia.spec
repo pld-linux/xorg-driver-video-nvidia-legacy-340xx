@@ -1,5 +1,6 @@
 # TODO
 # - should -libs Require main package?
+# - drop binary-only nvidia-settings from here, and use nvidia-settings.spec for it?
 #
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
@@ -26,6 +27,7 @@ Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
+# when updating version here, keep nvidia-settings.spec in sync as well
 Version:	310.32
 Release:	%{rel}
 Epoch:		1
