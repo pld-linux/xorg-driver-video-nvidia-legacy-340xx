@@ -7,6 +7,7 @@
 %bcond_without	kernel		# without kernel packages
 %bcond_without	userspace	# don't build userspace programs
 %bcond_with	force_userspace # force userspace build (useful if alt_kernel is set)
+%bcond_with	settings	# package nvidia-settings here (GPL version of same packaged from nvidia-settings.spec)
 %bcond_with	verbose		# verbose build (V=1)
 
 %if "%{_alt_kernel}" != "%{nil}"
@@ -234,12 +235,17 @@ install -d $RPM_BUILD_ROOT%{_libdir}/{nvidia,xorg/modules/{drivers,extensions/nv
 	$RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir},/etc/X11/xinit/xinitrc.d} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/{OpenCL/vendors,ld.so.conf.d,X11/xorg.conf.d}
 
-install -p nvidia-{settings,smi,xconfig,bug-report.sh} $RPM_BUILD_ROOT%{_bindir}
-install -p nvidia-cuda-proxy-{control,server} $RPM_BUILD_ROOT%{_bindir}
-cp -p nvidia-{settings,smi,xconfig,cuda-proxy-control}.1* $RPM_BUILD_ROOT%{_mandir}/man1
+%if %{with settings}
+install -p nvidia-settings $RPM_BUILD_ROOT%{_bindir}
+cp -p nvidia-settings.1* $RPM_BUILD_ROOT%{_mandir}/man1
 cp -p nvidia-settings.desktop $RPM_BUILD_ROOT%{_desktopdir}
 cp -p nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/nvidia-settings.sh
+%endif
+
+install -p nvidia-{smi,xconfig,bug-report.sh} $RPM_BUILD_ROOT%{_bindir}
+install -p nvidia-cuda-proxy-{control,server} $RPM_BUILD_ROOT%{_bindir}
+cp -p nvidia-{smi,xconfig,cuda-proxy-control}.1* $RPM_BUILD_ROOT%{_mandir}/man1
 install -p nvidia.icd $RPM_BUILD_ROOT%{_sysconfdir}/OpenCL/vendors
 
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xorg.conf.d
@@ -391,13 +397,18 @@ EOF
 %attr(755,root,root) %{_bindir}/nvidia-bug-report.sh
 %attr(755,root,root) %{_bindir}/nvidia-cuda-proxy-control
 %attr(755,root,root) %{_bindir}/nvidia-cuda-proxy-server
-%attr(755,root,root) %{_bindir}/nvidia-settings
 %attr(755,root,root) %{_bindir}/nvidia-smi
 %attr(755,root,root) %{_bindir}/nvidia-xconfig
+%{_mandir}/man1/nvidia-cuda-proxy-control.1*
+%{_mandir}/man1/nvidia-smi.1*
+%{_mandir}/man1/nvidia-xconfig.1*
+%if %{with settings}
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
+%attr(755,root,root) %{_bindir}/nvidia-settings
+%{_mandir}/man1/nvidia-settings.1*
 %{_desktopdir}/nvidia-settings.desktop
-%{_mandir}/man1/nvidia-*
 %{_pixmapsdir}/nvidia-settings.png
+%endif
 %endif
 
 %if %{with kernel}
