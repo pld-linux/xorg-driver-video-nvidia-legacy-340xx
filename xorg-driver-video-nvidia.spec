@@ -236,7 +236,7 @@ install -d $RPM_BUILD_ROOT%{_libdir}/{nvidia,xorg/modules/{drivers,extensions/nv
 
 install -p nvidia-{settings,smi,xconfig,bug-report.sh} $RPM_BUILD_ROOT%{_bindir}
 install -p nvidia-cuda-proxy-{control,server} $RPM_BUILD_ROOT%{_bindir}
-cp -p nvidia-{settings,smi,xconfig,cuda-proxy-control}.* $RPM_BUILD_ROOT%{_mandir}/man1
+cp -p nvidia-{settings,smi,xconfig,cuda-proxy-control}.1* $RPM_BUILD_ROOT%{_mandir}/man1
 cp -p nvidia-settings.desktop $RPM_BUILD_ROOT%{_desktopdir}
 cp -p nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/nvidia-settings.sh
