@@ -217,13 +217,14 @@ echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> kerne
 %if %{with kernel}
 cd kernel
 ln -sf Makefile.kbuild Makefile
-cat >> Makefile <<'EOF'
-
-$(obj)/nv-kernel.o: $(src)/nv-kernel.o.bin
-	cp $< $@
-EOF
-mv nv-kernel.o{,.bin}
-%build_kernel_modules -m nvidia
+#cat >> Makefile <<'EOF'
+#
+#$(obj)/nv-kernel.o: $(src)/nv-kernel.o.bin
+#	cp $< $@
+#EOF
+#mv nv-kernel.o{,.bin}
+#build_kernel_modules -m nvidia
+%{__make} SYSSRC=%{_kernelsrcdir} module
 %endif
 
 %install
