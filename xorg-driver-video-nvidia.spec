@@ -23,7 +23,7 @@
 %endif
 %define		no_install_post_check_so 1
 
-%define		rel 1
+%define		rel 2
 %define		pname	xorg-driver-video-nvidia
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -182,7 +182,12 @@ Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
-%{?with_dist_kernel:%requires_releq_kernel}
+%if %{with dist_kernel}
+%requires_releq_kernel
+%if "%{_alt_kernel}" == "%{nil}"
+Requires:	%releq_kernel -n drm
+%endif
+%endif
 Requires:	%{pname} = %{epoch}:%{version}
 Provides:	X11-driver-nvidia(kernel)
 Obsoletes:	XFree86-nvidia-kernel
