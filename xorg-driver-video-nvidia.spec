@@ -366,11 +366,11 @@ rm -rf $RPM_BUILD_ROOT
 %post
 cat << 'EOF'
 NOTE: You must also install kernel module for this driver to work
-  kernel-video-nvidia-%{version}
+  kernel%{_alt_kernel}-video-nvidia-%{version}
 
 EOF
 
-%post libs -p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
 %if %{with userspace}
