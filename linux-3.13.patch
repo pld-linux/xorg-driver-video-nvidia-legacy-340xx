@@ -59,8 +59,7 @@ diff -rupN NVIDIA-Linux-x86_64-331.38.orig/kernel/nv-acpi.c NVIDIA-Linux-x86_64-
 +#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 13, 0)
  #ifdef DEVICE_ACPI_HANDLE
      nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv); 
--    dev_handle = DEVICE_ACPI_HANDLE(&nvl->dev->dev);
-+    dev_handle = ACPI_DEVICE_HANDLE(&nvl->dev->dev);
+     dev_handle = DEVICE_ACPI_HANDLE(&nvl->dev->dev);
  #else
      return RM_ERR_NOT_SUPPORTED;
  #endif
