@@ -130,7 +130,7 @@ Summary(pl.UTF-8):	Biblioteki OpenGL (GL i GLX) Nvidia
 Group:		X11/Development/Libraries
 Requires(post,postun):	/sbin/ldconfig
 Requires:	libvdpau >= 0.3
-Provides:	OpenGL = 2.1
+Provides:	OpenGL = 3.3
 Provides:	OpenGL-GLX = 1.4
 Obsoletes:	X11-OpenGL-core < 1:7.0.0
 Obsoletes:	X11-OpenGL-libGL < 1:7.0.0
