@@ -76,6 +76,8 @@ Requires:	%{pname}-libs = %{epoch}:%{version}-%{rel}
 Requires:	xorg-xserver-server
 Requires:	xorg-xserver-server(videodrv-abi) <= 18.0
 Requires:	xorg-xserver-server(videodrv-abi) >= 2.0
+Provides:	ocl-icd(nvidia)
+Provides:	ocl-icd-driver
 Provides:	xorg-driver-video
 Provides:	xorg-xserver-module(glx)
 Obsoletes:	XFree86-driver-nvidia
@@ -301,7 +303,6 @@ sed -i -e 's|@@LIBDIR@@|%{_libdir}|g' $RPM_BUILD_ROOT/etc/X11/xorg.conf.d/10-nvi
 
 for f in \
 	libGL.so.%{version}			\
-	libOpenCL.so.1.0.0			\
 	libcuda.so.%{version}			\
 	libnvcuvid.so.%{version}		\
 	libnvidia-cfg.so.%{version}		\
@@ -342,7 +343,6 @@ echo %{_libdir}/vdpau >>$RPM_BUILD_ROOT%{_sysconfdir}/ld.so.conf.d/nvidia.conf
 # OpenGL ABI for Linux compatibility
 ln -sf libGL.so.%{version} $RPM_BUILD_ROOT%{_libdir}/nvidia/libGL.so.1
 ln -sf libGL.so.1 $RPM_BUILD_ROOT%{_libdir}/nvidia/libGL.so
-ln -sf libOpenCL.so.1 $RPM_BUILD_ROOT%{_libdir}/nvidia/libOpenCL.so
 ln -sf libcuda.so.1 $RPM_BUILD_ROOT%{_libdir}/nvidia/libcuda.so
 ln -sf libnvcuvid.so.1 $RPM_BUILD_ROOT%{_libdir}/nvidia/libnvcuvid.so
 %endif
@@ -397,9 +397,6 @@ EOF
 %dir %{_libdir}/nvidia
 %attr(755,root,root) %{_libdir}/nvidia/libGL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libGL.so.1
-%attr(755,root,root) %{_libdir}/nvidia/libOpenCL.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/nvidia/libOpenCL.so.1
-%attr(755,root,root) %{_libdir}/nvidia/libOpenCL.so
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libcuda.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so
