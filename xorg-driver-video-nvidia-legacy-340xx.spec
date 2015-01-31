@@ -38,9 +38,9 @@ Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
-# Source0-md5:	4aa6039b8543312b41a924bb87b0b2db
+# Source0-md5:	8064c0a0998c3e7ee3c98ac1832b8194
 Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
-# Source1-md5:	4558104f8601d27c7fd3e5cec7892345
+# Source1-md5:	440df290e213280d6e20d4d4be6f8b4c
 Source2:	xorg-driver-video-nvidia-xinitrc.sh
 Source3:	gl.pc.in
 Source4:	10-nvidia.conf
