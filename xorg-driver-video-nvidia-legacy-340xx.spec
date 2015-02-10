@@ -344,7 +344,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 cat << 'EOF'
 NOTE: You must also install kernel module for this driver to work
-  kernel%{_alt_kernel}-video-nvidia-%{version}
+  kernel%{_alt_kernel}-video-nvidia-legacy-340xx-%{version}
 
 EOF
 
