@@ -175,7 +175,7 @@ Eszközök az nVidia grafikus kártyák beállításához.
 Narzędzia do zarządzania kartami graficznymi nVidia.
 
 %define	kernel_pkg()\
-%package -n kernel%{_alt_kernel}-video-nvidia\
+%package -n kernel%{_alt_kernel}-video-nvidia-legacy-340xx\
 Summary:	nVidia kernel module for nVidia Architecture support\
 Summary(de.UTF-8):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung\
 Summary(hu.UTF-8):	nVidia Architektúra támogatás Linux kernelhez.\
@@ -193,29 +193,29 @@ Requires:	%{pname} = %{epoch}:%{version}\
 Provides:	X11-driver-nvidia(kernel)\
 Obsoletes:	XFree86-nvidia-kernel\
 \
-%description -n kernel%{_alt_kernel}-video-nvidia\
+%description -n kernel%{_alt_kernel}-video-nvidia-legacy-340xx\
 nVidia Architecture support for Linux kernel.\
 \
-%description -n kernel%{_alt_kernel}-video-nvidia -l de.UTF-8\
+%description -n kernel%{_alt_kernel}-video-nvidia-legacy-340xx -l de.UTF-8\
 Die nVidia-Architektur-Unterstützung für den Linux-Kern.\
 \
-%description -n kernel%{_alt_kernel}-video-nvidia -l hu.UTF-8\
+%description -n kernel%{_alt_kernel}-video-nvidia-legacy-340xx -l hu.UTF-8\
 nVidia Architektúra támogatás Linux kernelhez.\
 \
-%description -n kernel%{_alt_kernel}-video-nvidia -l pl.UTF-8\
+%description -n kernel%{_alt_kernel}-video-nvidia-legacy-340xx -l pl.UTF-8\
 Obsługa architektury nVidia dla jądra Linuksa. Pakiet wymagany przez\
 sterownik nVidii dla Xorg/XFree86.\
 \
 %if %{with kernel}\
-%files -n kernel%{_alt_kernel}-video-nvidia\
+%files -n kernel%{_alt_kernel}-video-nvidia-legacy-340xx\
 %defattr(644,root,root,755)\
 /lib/modules/%{_kernel_ver}/misc/*.ko*\
 %endif\
 \
-%post	-n kernel%{_alt_kernel}-video-nvidia\
+%post	-n kernel%{_alt_kernel}-video-nvidia-legacy-340xx\
 %depmod %{_kernel_ver}\
 \
-%postun	-n kernel%{_alt_kernel}-video-nvidia\
+%postun	-n kernel%{_alt_kernel}-video-nvidia-legacy-340xx\
 %depmod %{_kernel_ver}\
 %{nil}
 
