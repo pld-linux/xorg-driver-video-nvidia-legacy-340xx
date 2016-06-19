@@ -1,0 +1,38 @@
+--- NVIDIA-Linux-x86_64-340.96-no-compat32/kernel/os-mlock.c~	2015-11-09 06:44:53.000000000 +0100
++++ NVIDIA-Linux-x86_64-340.96-no-compat32/kernel/os-mlock.c	2016-06-19 18:41:01.530699309 +0200
+@@ -45,7 +45,11 @@
+     }
+ 
+     down_read(&mm->mmap_sem);
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0))
++    ret = get_user_pages((unsigned long)address,
++#else
+     ret = get_user_pages(current, mm, (unsigned long)address,
++#endif
+             page_count, write, force, user_pages, NULL);
+     up_read(&mm->mmap_sem);
+     pinned = ret;
+@@ -58,7 +62,11 @@
+     else if (pinned < page_count)
+     {
+         for (i = 0; i < pinned; i++)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0))
++            put_page(user_pages[i]);
++#else
+             page_cache_release(user_pages[i]);
++#endif
+         os_free_mem(user_pages);
+         return RM_ERR_INVALID_ADDRESS;
+     }
+@@ -85,7 +93,11 @@
+     {
+         if (write)
+             set_page_dirty_lock(user_pages[i]);
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0))
++        put_page(user_pages[i]);
++#else
+         page_cache_release(user_pages[i]);
++#endif
+     }
+ 
+     os_free_mem(user_pages);
