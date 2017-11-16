@@ -25,22 +25,22 @@ exit 1
 
 %define		no_install_post_check_so 1
 
-%define		rel	4
+%define		rel	0.1
 %define		pname	xorg-driver-video-nvidia-legacy-340xx
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
 Summary(pl.UTF-8):	Sterowniki do kart graficznych nVidia GeForce/Quadro
 Name:		%{pname}%{?_pld_builder:%{?with_kernel:-kernel}}%{_alt_kernel}
 # when updating version here, keep nvidia-settings.spec in sync as well
-Version:	340.102
+Version:	340.104
 Release:	%{rel}%{?_pld_builder:%{?with_kernel:@%{_kernel_ver_str}}}
 Epoch:		1
 License:	nVidia Binary
 Group:		X11
 Source0:	http://us.download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}.run
-# Source0-md5:	61aad6a98238bc61466e6a9e392cfd08
+# Source0-md5:	42e9c98e156f6ac2658ee526d796a428
 Source1:	http://us.download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-no-compat32.run
-# Source1-md5:	81e720487caa2823586b32659da9acc1
+# Source1-md5:	efbd37cde63d50f657d55a6f2b321142
 Source2:	xorg-driver-video-nvidia-xinitrc.sh
 Source3:	gl.pc.in
 Source4:	10-nvidia.conf
