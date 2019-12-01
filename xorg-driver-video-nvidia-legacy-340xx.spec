@@ -25,7 +25,7 @@ exit 1
 
 %define		no_install_post_check_so 1
 
-%define		rel	4
+%define		rel	5
 %define		pname	xorg-driver-video-nvidia-legacy-340xx
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
@@ -51,6 +51,7 @@ Patch2:		linux-4.0.patch
 Patch3:		kernel-4.4.169.patch
 Patch4:		kernel-5.0.patch
 Patch5:		kernel-5.3.patch
+Patch6:		kernel-5.4.patch
 URL:		http://www.nvidia.com/object/unix.html
 BuildRequires:	rpmbuild(macros) >= 1.701
 %{?with_kernel:%{expand:%buildrequires_kernel kernel%%{_alt_kernel}-module-build >= 3:2.6.20.2}}
@@ -232,8 +233,8 @@ cd kernel\
 #EOF\
 #mv nv-kernel.o{,.bin}\
 #build_kernel_modules -m nvidia\
-%{__make} SYSSRC=%{_kernelsrcdir} clean\
-%{__make} SYSSRC=%{_kernelsrcdir} module\
+%{__make} SYSSRC=%{_kernelsrcdir} M=`pwd` clean\
+%{__make} SYSSRC=%{_kernelsrcdir} M=`pwd` module\
 cd ..\
 %install_kernel_modules -D installed -m kernel/nvidia -d misc\
 %{nil}
@@ -256,6 +257,7 @@ rm -rf NVIDIA-Linux-x86*-%{version}*
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> kernel/Makefile.kbuild
 
 %build
