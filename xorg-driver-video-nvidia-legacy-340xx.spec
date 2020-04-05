@@ -25,7 +25,7 @@ exit 1
 
 %define		no_install_post_check_so 1
 
-%define		rel	3
+%define		rel	4
 %define		pname	xorg-driver-video-nvidia-legacy-340xx
 Summary:	Linux Drivers for nVidia GeForce/Quadro Chips
 Summary(hu.UTF-8):	Linux meghajtók nVidia GeForce/Quadro chipekhez
