@@ -1,6 +1,5 @@
 # TODO
-# - should -libs Require main package?
-# - drop binary-only nvidia-settings from here, and use nvidia-settings.spec for it?
+# - drop binary-only nvidia-settings from here, and use nvidia-settings.spec for it
 # - kernel-drm is required on never kernels. driver for kernel-longterm not requires drm
 #
 # Conditional build:
@@ -48,7 +47,7 @@ Source5:	10-nvidia-modules.conf
 Patch0:		X11-driver-nvidia-GL.patch
 Patch1:		X11-driver-nvidia-desktop.patch
 Patch2:		kernel-5.6.patch
-URL:		http://www.nvidia.com/object/unix.html
+URL:		https://www.nvidia.com/en-us/drivers/unix/
 BuildRequires:	rpmbuild(macros) >= 1.701
 %{?with_kernel:%{expand:%buildrequires_kernel kernel%%{_alt_kernel}-module-build >= 3:2.6.20.2}}
 BuildRequires:	sed >= 4.0
