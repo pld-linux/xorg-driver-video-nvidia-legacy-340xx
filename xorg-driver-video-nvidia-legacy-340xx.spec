@@ -382,6 +382,7 @@ EOF
 %dir %{_libdir}/nvidia
 %attr(755,root,root) %{_libdir}/nvidia/libGL.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libGL.so.1
+%attr(755,root,root) %{_libdir}/nvidia/libGL.so
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/nvidia/libcuda.so.1
 %attr(755,root,root) %{_libdir}/nvidia/libcuda.so
@@ -409,7 +410,6 @@ EOF
 %{_includedir}/GL/glext.h
 %{_includedir}/GL/glx.h
 %{_includedir}/GL/glxext.h
-%attr(755,root,root) %{_libdir}/nvidia/libGL.so
 %{_pkgconfigdir}/gl.pc
 
 %files doc
