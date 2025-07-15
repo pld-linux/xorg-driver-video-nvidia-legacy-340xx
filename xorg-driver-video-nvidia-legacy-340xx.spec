@@ -321,9 +321,9 @@ rm -rf NVIDIA-Linux-x86*-%{version}*
 /bin/sh %{SOURCE1} --extract-only
 %setup -qDT -n NVIDIA-Linux-x86_64-%{version}-no-compat32
 %endif
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
 echo 'EXTRA_CFLAGS += -Wno-pointer-arith -Wno-sign-compare -Wno-unused' >> kernel/Makefile.kbuild
 
 %build
